@@ -147,7 +147,11 @@ export const Hero: React.FC<HeroProps> = ({ onShopClick, onKitsClick, onHowItWor
 
                     <div className="flex items-center gap-2 pt-1">
                       <button
-                        onClick={() => addToCart(heroProduct)}
+                        onClick={() => {
+                          addToCart(heroProduct);
+                          window.location.hash = 'checkout';
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
                         className="w-full py-2.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-90 text-white rounded-xl text-xs font-black tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-1.5 cursor-pointer"
                       >
                         <Sparkles className="w-3.5 h-3.5 text-white" />

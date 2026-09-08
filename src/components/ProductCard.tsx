@@ -54,7 +54,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
 
   return (
     <div 
-      className={`group relative flex flex-col h-full bg-white rounded-3xl overflow-hidden border transition-all duration-300 shadow-sm ${
+      className={`group card-interactive relative flex flex-col h-full bg-white rounded-3xl overflow-hidden border transition-all duration-300 shadow-sm ${
         isSoldOut 
           ? 'border-[#F2D3E2] opacity-80 cursor-not-allowed select-none' 
           : 'border-[#F2D3E2] hover:border-[#FF2D8D] hover:shadow-xl hover:shadow-[#FF2D8D]/15 cursor-pointer'

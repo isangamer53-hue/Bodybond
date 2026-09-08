@@ -151,7 +151,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   const handleOrderNowCOD = () => {
     addToCart(product, 1, undefined, currentSizeLabel);
-    setIsCheckoutOpen(true);
+    setIsCartOpen(false);
+    onNavigate('checkout');
   };
 
   const handleReviewSubmit = (e: React.FormEvent) => {

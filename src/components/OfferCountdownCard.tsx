@@ -86,7 +86,7 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
           </div>
 
           {/* Colon */}
-          <span className="text-[#FF2D8D] font-black text-xl sm:text-2xl pb-3 select-none animate-pulse">
+          <span className="text-[#FF2D8D] font-black text-xl sm:text-2xl pb-3 select-none animate-pulse-soft">
             :
           </span>
 
@@ -101,7 +101,7 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
           </div>
 
           {/* Colon */}
-          <span className="text-[#FF2D8D] font-black text-xl sm:text-2xl pb-3 select-none animate-pulse">
+          <span className="text-[#FF2D8D] font-black text-xl sm:text-2xl pb-3 select-none animate-pulse-soft">
             :
           </span>
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { CartProvider, useCart } from './context/CartContext';
 import { LanguageProvider } from './context/LanguageContext';
 import { MediaProvider, useMedia } from './context/MediaContext';
@@ -28,6 +29,7 @@ const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m
 const FaqPage = lazy(() => import('./pages/FaqPage').then(m => ({ default: m.FaqPage })));
 const OrderTrackingPage = lazy(() => import('./pages/OrderTrackingPage').then(m => ({ default: m.OrderTrackingPage })));
 const AdminPage = lazy(() => import('./pages/AdminPage').then(m => ({ default: m.AdminPage })));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
 
 // Heavy Modals (Loaded only on user interaction)
 const ProductQuickViewModal = lazy(() => import('./components/ProductQuickViewModal').then(m => ({ default: m.ProductQuickViewModal })));
@@ -73,6 +75,8 @@ function MainStore() {
         setActivePage('product-detail');
       } else if (hash === 'products' || hash === 'shop') {
         setActivePage('shop');
+      } else if (hash === 'checkout' || hash === 'order' || hash === 'full-order') {
+        setActivePage('checkout');
       } else if (hash === 'track' || hash === 'track-order' || hash === 'tracking') {
         setActivePage('track-order');
       } else if (hash === 'how-it-works') {
@@ -124,6 +128,13 @@ function MainStore() {
       return;
     }
 
+    if (page === 'checkout' || page === 'order' || page === 'full-order') {
+      setActivePage('checkout');
+      window.location.hash = 'checkout';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     if (page === 'track-order') {
       setActivePage('track-order');
       window.location.hash = 'track-order';
@@ -166,65 +177,80 @@ function MainStore() {
 
       {/* Main Content Area - Discrete Pages */}
       <main className="flex-grow">
-        {activePage === 'home' && (
-          <HomePage 
-            onNavigate={handleNavigate} 
-            onSelectProduct={handleSelectProduct} 
-          />
-        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activePage + (activePage === 'product-detail' ? `-${selectedProductId}` : '')}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
+            className="w-full"
+          >
+            {activePage === 'home' && (
+              <HomePage 
+                onNavigate={handleNavigate} 
+                onSelectProduct={handleSelectProduct} 
+              />
+            )}
 
-        <Suspense fallback={<PageLoadingFallback />}>
-          {activePage === 'product-detail' && (
-            <ProductDetailPage 
-              productId={selectedProductId}
-              onNavigate={handleNavigate}
-              onSelectProduct={handleSelectProduct}
-            />
-          )}
+            <Suspense fallback={<PageLoadingFallback />}>
+              {activePage === 'product-detail' && (
+                <ProductDetailPage 
+                  productId={selectedProductId}
+                  onNavigate={handleNavigate}
+                  onSelectProduct={handleSelectProduct}
+                />
+              )}
 
-          {activePage === 'shop' && (
-            <ShopPage 
-              onNavigate={handleNavigate} 
-              onSelectProduct={handleSelectProduct} 
-            />
-          )}
+              {activePage === 'shop' && (
+                <ShopPage 
+                  onNavigate={handleNavigate} 
+                  onSelectProduct={handleSelectProduct} 
+                />
+              )}
 
-          {activePage === 'track-order' && (
-            <OrderTrackingPage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'checkout' && (
+                <CheckoutPage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'how-it-works' && (
-            <HowItWorksPage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'track-order' && (
+                <OrderTrackingPage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'where-to-use' && (
-            <WhereToUsePage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'how-it-works' && (
+                <HowItWorksPage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'how-to-use' && (
-            <HowToUsePage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'where-to-use' && (
+                <WhereToUsePage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'how-to-remove' && (
-            <HowToRemovePage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'how-to-use' && (
+                <HowToUsePage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'outfit-matcher' && (
-            <OutfitMatcherPage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'how-to-remove' && (
+                <HowToRemovePage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'reviews' && (
-            <ReviewsPage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'outfit-matcher' && (
+                <OutfitMatcherPage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'about' && (
-            <AboutPage onNavigate={handleNavigate} />
-          )}
+              {activePage === 'reviews' && (
+                <ReviewsPage onNavigate={handleNavigate} />
+              )}
 
-          {activePage === 'faq' && (
-            <FaqPage onNavigate={handleNavigate} />
-          )}
-        </Suspense>
+              {activePage === 'about' && (
+                <AboutPage onNavigate={handleNavigate} />
+              )}
+
+              {activePage === 'faq' && (
+                <FaqPage onNavigate={handleNavigate} />
+              )}
+            </Suspense>
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Footer */}
@@ -235,7 +261,6 @@ function MainStore() {
 
       {/* Interactive Global Modals and Drawers */}
       <CartDrawer />
-      <SocialProofToast />
       <FloatingWhatsApp />
 
       {/* Code-split dynamic modals loaded only when opened */}

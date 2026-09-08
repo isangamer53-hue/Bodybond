@@ -171,11 +171,14 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
             <button
               id="cart-button"
               onClick={() => setIsCartOpen(true)}
-              className="relative p-2.5 text-[#1E141D] hover:text-[#FF2D8D] transition-all rounded-full cursor-pointer group"
+              className="relative p-2.5 text-[#1E141D] hover:text-[#FF2D8D] transition-transform duration-150 rounded-full cursor-pointer group btn-press hover:scale-105"
               aria-label="View Shopping Bag"
             >
               <ShoppingBag className="w-6 h-6 stroke-[1.8]" />
-              <span className="absolute bottom-1 right-1 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-black bg-[#FF2D8D] text-white rounded-full shadow-md">
+              <span 
+                key={totalItems} 
+                className="animate-badge-pop absolute bottom-1 right-1 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-black bg-[#FF2D8D] text-white rounded-full shadow-md"
+              >
                 {totalItems}
               </span>
             </button>

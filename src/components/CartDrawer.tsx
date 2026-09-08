@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   X, 
   Trash2, 
@@ -46,8 +47,6 @@ export const CartDrawer: React.FC = () => {
   const [orderNote, setOrderNote] = useState('');
   const [showNoteInput, setShowNoteInput] = useState(false);
 
-  if (!isCartOpen) return null;
-
   const discountAmountNZD = subtotalNZD * appliedDiscount;
   const finalTotalNZD = Math.max(0, subtotalNZD - discountAmountNZD);
 
@@ -65,7 +64,8 @@ export const CartDrawer: React.FC = () => {
 
   const handleCheckoutClick = () => {
     setIsCartOpen(false);
-    setIsCheckoutOpen(true);
+    window.location.hash = 'checkout';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Upsell candidates
@@ -74,32 +74,44 @@ export const CartDrawer: React.FC = () => {
   ).slice(0, 2);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden animate-in fade-in duration-200">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-xs transition-opacity"
-        onClick={() => setIsCartOpen(false)}
-      />
+    <AnimatePresence>
+      {isCartOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="absolute inset-0 bg-black/70 backdrop-blur-xs"
+            onClick={() => setIsCartOpen(false)}
+          />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
-        <div className="w-screen max-w-md bg-[#FFFDFE] text-[#1E141D] shadow-2xl flex flex-col border-l border-[#F2D3E2]">
-          
-          {/* Header */}
-          <div className="p-4 sm:p-5 border-b border-[#F2D3E2] flex items-center justify-between bg-[#FFF5F8]">
-            <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#FF2D8D]" />
-              <h2 className="font-extrabold text-sm sm:text-base tracking-wider text-[#1E141D] uppercase">
-                {t.cartTitle} ({totalItems})
-              </h2>
-            </div>
-            <button
-              onClick={() => setIsCartOpen(false)}
-              className="p-1.5 text-[#7A5E70] hover:text-[#1E141D] rounded-full hover:bg-black/5 transition-colors cursor-pointer"
-              aria-label="Close Bag"
+          <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10 pointer-events-none">
+            <motion.div 
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 28, stiffness: 300, mass: 0.8 }}
+              className="w-screen max-w-md bg-[#FFFDFE] text-[#1E141D] shadow-2xl flex flex-col border-l border-[#F2D3E2] pointer-events-auto"
             >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+              
+              {/* Header */}
+              <div className="p-4 sm:p-5 border-b border-[#F2D3E2] flex items-center justify-between bg-[#FFF5F8]">
+                <div className="flex items-center gap-2">
+                  <ShoppingBag className="w-5 h-5 text-[#FF2D8D]" />
+                  <h2 className="font-extrabold text-sm sm:text-base tracking-wider text-[#1E141D] uppercase">
+                    {t.cartTitle} ({totalItems})
+                  </h2>
+                </div>
+                <button
+                  onClick={() => setIsCartOpen(false)}
+                  className="p-1.5 text-[#7A5E70] hover:text-[#1E141D] rounded-full hover:bg-black/5 transition-colors cursor-pointer"
+                  aria-label="Close Bag"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
           {/* COD Info Banner inside Cart */}
           <div className="bg-[#FFEBF3] border-b border-[#F2D3E2] px-4 py-2.5 flex items-center gap-2 text-xs text-[#1E141D]">
@@ -290,8 +302,10 @@ export const CartDrawer: React.FC = () => {
             </div>
           )}
 
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </div>
+      )}
+    </AnimatePresence>
   );
 };

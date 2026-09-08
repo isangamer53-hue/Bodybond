@@ -152,3 +152,91 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #FF2D8D;
 }
+
+/* ========================================================================= */
+/* GPU-ACCELERATED ZERO-LAG ANIMATION UTILITIES */
+/* Strictly uses transform & opacity for 60fps/120fps buttery performance */
+/* ========================================================================= */
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Subtle floating animation (GPU transform only) */
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.animate-float-subtle {
+  animation: float-subtle 3.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Soft pulse for live indicator dots */
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.72; transform: scale(0.95); }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2.2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Shimmer highlight for exclusive badges */
+@keyframes shimmer-sweep {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer-sweep 3.5s ease-in-out infinite;
+}
+
+/* Smooth Interactive Card Lift (Transforms only, zero reflow) */
+.card-interactive {
+  transition: transform 0.28s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.28s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.28s ease;
+  will-change: transform;
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+}
+
+/* Instant micro press feedback */
+.btn-press {
+  transition: transform 0.12s cubic-bezier(0.2, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.btn-press:active {
+  transform: scale(0.96);
+}
+
+/* Badge bounce pop on update */
+@keyframes badge-pop {
+  0% { transform: scale(0.85); }
+  50% { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+.animate-badge-pop {
+  animation: badge-pop 0.32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Respect user preferences for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

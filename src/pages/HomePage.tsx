@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Plus, 
   Minus, 
@@ -128,25 +129,40 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         {/* Hero Content Overlay */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-4 sm:space-y-6 pt-8 pb-12">
           {/* Main Display Headline */}
-          <h1 className="font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.95]">
+          <motion.h1 
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            className="font-extrabold text-4xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-white uppercase leading-[0.95]"
+          >
             SHOP &<br />
             <span className="text-white">SAVE TODAY!</span>
-          </h1>
+          </motion.h1>
 
           {/* Subtitle */}
-          <p className="text-sm sm:text-lg md:text-xl font-bold tracking-wide text-white/95 uppercase">
+          <motion.p 
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className="text-sm sm:text-lg md:text-xl font-bold tracking-wide text-white/95 uppercase"
+          >
             No More Outfit Anxiety.
-          </p>
+          </motion.p>
 
           {/* Action Button: Hot Pink Luxury Pill Button */}
-          <div className="pt-2 sm:pt-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="pt-2 sm:pt-4"
+          >
             <button
               onClick={() => onNavigate('shop')}
-              className="px-8 sm:px-12 py-3.5 sm:py-4 bg-[#FF2D8D] hover:bg-[#E61B78] text-white font-extrabold text-xs sm:text-sm tracking-[0.2em] uppercase rounded-full transition-all shadow-xl hover:scale-105 cursor-pointer shadow-[#FF2D8D]/30"
+              className="px-8 sm:px-12 py-3.5 sm:py-4 bg-[#FF2D8D] hover:bg-[#E61B78] text-white font-extrabold text-xs sm:text-sm tracking-[0.2em] uppercase rounded-full transition-all shadow-xl hover:scale-105 active:scale-95 cursor-pointer shadow-[#FF2D8D]/30 btn-press"
             >
               SHOP BODYBOND
             </button>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -162,7 +178,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* 3. WELCOME SECTION */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center space-y-10">
+      <motion.section 
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto text-center space-y-10"
+      >
         <div className="space-y-6">
           <h2 className="font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#FF2D8D] tracking-tight">
             Welcome to BODYBOND!
@@ -181,22 +203,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Studio photo of happy girls holding & testing Bodybond */}
-        <div className="rounded-2xl overflow-hidden shadow-xl border border-[#F2D3E2] bg-white max-w-3xl mx-auto p-2">
+        <div className="rounded-2xl overflow-hidden shadow-xl border border-[#F2D3E2] bg-white max-w-3xl mx-auto p-2 group">
           <img
             src={welcomeImage || "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=80"}
             alt="Three happy friends with Bodybond essentials"
             referrerPolicy="no-referrer"
             loading="lazy"
             decoding="async"
-            className="w-full h-auto object-cover rounded-xl max-h-[500px]"
+            className="w-full h-auto object-cover rounded-xl max-h-[500px] transition-transform duration-700 ease-out group-hover:scale-[1.02]"
           />
         </div>
-      </section>
+      </motion.section>
 
       {/* ========================================================================= */}
       {/* 4. FEATURED INSTANT-BUY PRODUCT SECTION */}
       {/* ========================================================================= */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
+      <motion.section 
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="py-12 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto"
+      >
         <div className="space-y-8">
           
           {/* Main Visual */}
@@ -337,7 +365,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="space-y-3">
             <button
               onClick={handleGlueAddToCart}
-              className="w-full py-4 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase rounded-xl transition-all shadow-xl shadow-[#FF2D8D]/25 cursor-pointer flex items-center justify-center gap-2"
+              className="w-full py-4 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase rounded-xl transition-all shadow-xl shadow-[#FF2D8D]/25 cursor-pointer flex items-center justify-center gap-2 btn-press"
             >
               {isGlueAdded ? (
                 <>
@@ -362,12 +390,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ========================================================================= */}
       {/* 5. MOST LOVED SELLERS SECTION */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#F2D3E2]">
+      <motion.section 
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#F2D3E2]"
+      >
         <div className="space-y-10">
           
           <h2 className="font-extrabold text-3xl sm:text-4xl text-center text-[#1E141D] uppercase tracking-tight">
@@ -382,7 +416,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div
                   key={item.id}
                   onClick={() => !isSoldOut && onNavigate('product-detail', item.id)}
-                  className={`group flex flex-col space-y-3 bg-white rounded-2xl overflow-hidden border p-3 sm:p-4 transition-all shadow-sm ${
+                  className={`group card-interactive flex flex-col space-y-3 bg-white rounded-2xl overflow-hidden border p-3 sm:p-4 transition-all shadow-sm ${
                     isSoldOut 
                       ? 'border-[#F2D3E2] opacity-80 cursor-not-allowed select-none' 
                       : 'border-[#F2D3E2] hover:border-[#FF2D8D] hover:shadow-lg cursor-pointer'
@@ -396,7 +430,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       referrerPolicy="no-referrer"
                       loading="lazy"
                       decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     />
                     {item.badgeText && (
                       <div className="absolute top-2 left-2 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded shadow-md">
@@ -427,7 +461,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                         e.stopPropagation();
                         addToCart(item);
                       }}
-                      className="w-full py-2.5 bg-[#FFEBF3] hover:bg-[#FF2D8D] hover:text-white text-[#FF2D8D] text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-colors mt-auto cursor-pointer shadow-sm"
+                      className="w-full py-2.5 bg-[#FFEBF3] hover:bg-[#FF2D8D] hover:text-white text-[#FF2D8D] text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-colors mt-auto cursor-pointer shadow-sm btn-press"
                     >
                       Quick Add
                     </button>
@@ -455,12 +489,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
       {/* ========================================================================= */}
       {/* 6. FOLLOW US FOR MORE! */}
       {/* ========================================================================= */}
-      <section className="relative w-full py-20 sm:py-28 px-4 sm:px-6 overflow-hidden bg-black flex items-center justify-center border-t border-[#F2D3E2]">
+      <motion.section 
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative w-full py-20 sm:py-28 px-4 sm:px-6 overflow-hidden bg-black flex items-center justify-center border-t border-[#F2D3E2]"
+      >
         {/* Background photo */}
         <div className="absolute inset-0 z-0 opacity-40">
           <img
@@ -488,7 +528,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               href="https://www.facebook.com/share/1QybWhQJCa/"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 bg-white hover:bg-white/90 text-[#1E141D] border border-transparent font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md flex items-center gap-2.5 rounded-xl cursor-pointer"
+              className="px-6 py-3.5 bg-white hover:bg-white/90 text-[#1E141D] border border-transparent font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md flex items-center gap-2.5 rounded-xl cursor-pointer btn-press hover:scale-105"
             >
               <Facebook className="w-5 h-5 text-[#1877F2]" />
               <span>Facebook Page</span>
@@ -497,14 +537,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               href="https://www.instagram.com/bodybond_glue?stkn=MWg3eGZ6bzhhdnF3Yw=="
               target="_blank"
               rel="noopener noreferrer"
-              className="px-6 py-3.5 bg-white hover:bg-white/90 text-[#1E141D] border border-transparent font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md flex items-center gap-2.5 rounded-xl cursor-pointer"
+              className="px-6 py-3.5 bg-white hover:bg-white/90 text-[#1E141D] border border-transparent font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md flex items-center gap-2.5 rounded-xl cursor-pointer btn-press hover:scale-105"
             >
               <Instagram className="w-5 h-5 text-[#E4405F]" />
               <span>Instagram Page</span>
             </a>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* ========================================================================= */}
       {/* 7. SOFT PINK BANNER 2 */}
@@ -518,7 +558,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* 8. COMMONLY ASKED.. FAQ SECTION */}
       {/* ========================================================================= */}
-      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto">
+      <motion.section 
+        initial={{ opacity: 0, y: 22 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-3xl mx-auto"
+      >
         <div className="space-y-8">
           
           <h2 className="font-extrabold text-3xl sm:text-4xl text-center text-[#1E141D] tracking-tight">
@@ -539,23 +585,33 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     className="w-full p-4 sm:p-5 text-left flex items-center justify-between text-xs sm:text-sm font-extrabold text-[#1E141D] tracking-wider uppercase hover:text-[#FF2D8D] transition-colors cursor-pointer"
                   >
                     <span>{item.q}</span>
-                    <span className="text-[#FF2D8D] ml-3 text-base font-bold">
+                    <span className="text-[#FF2D8D] ml-3 text-base font-bold transition-transform duration-200">
                       {isOpen ? '—' : '+'}
                     </span>
                   </button>
 
-                  {isOpen && (
-                    <div className="px-4 pb-5 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#503748] leading-relaxed border-t border-[#F4DCE7] pt-3 animate-in fade-in duration-200">
-                      {item.a}
-                    </div>
-                  )}
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.22, ease: 'easeInOut' }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-5 sm:px-5 sm:pb-5 text-xs sm:text-sm text-[#503748] leading-relaxed border-t border-[#F4DCE7] pt-3">
+                          {item.a}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             })}
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

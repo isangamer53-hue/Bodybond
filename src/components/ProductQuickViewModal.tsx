@@ -213,7 +213,7 @@ export const ProductQuickViewModal: React.FC = () => {
                 className={`flex-1 py-4 rounded-2xl text-xs font-bold tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer ${
                   added
                     ? 'bg-emerald-600 text-white'
-                    : 'bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white hover:shadow-lg shadow-[#FF2D8D]/25'
+                    : 'bg-[#1A1817] hover:bg-black text-white hover:shadow-lg'
                 }`}
               >
                 {added ? (
@@ -229,6 +229,19 @@ export const ProductQuickViewModal: React.FC = () => {
                 )}
               </button>
             </div>
+
+            <button
+              onClick={() => {
+                addToCart(quickViewProduct, quantity, selectedShade, selectedSize);
+                setQuickViewProduct(null);
+                window.location.hash = 'checkout';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white text-xs font-black uppercase tracking-wider shadow-lg flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Order Now (ক্যাশ অন ডেলিভারি পেজ)</span>
+            </button>
 
             <button
               onClick={() => {

@@ -53,6 +53,8 @@ export const CheckoutModal: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
 
+  const [formError, setFormError] = useState<string | null>(null);
+
   // Coupon input state
   const [couponInput, setCouponInput] = useState('');
   const [couponMsg, setCouponMsg] = useState<{ isError: boolean; text: string } | null>(null);
@@ -97,8 +99,17 @@ export const CheckoutModal: React.FC = () => {
 
   const handleConfirmOrder = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName.trim() || !phone.trim() || !address.trim()) {
-      alert('Please enter your name, phone number, and address.');
+    setFormError(null);
+    if (!fullName.trim()) {
+      setFormError('দয়া করে আপনার পুরো নাম লিখুন (Please enter your full name).');
+      return;
+    }
+    if (!phone.trim()) {
+      setFormError('দয়া করে আপনার সচল মোবাইল নম্বর লিখুন (Please enter your phone number).');
+      return;
+    }
+    if (!address.trim()) {
+      setFormError('দয়া করে সম্পূর্ণ ডেলিভারি ঠিকানা লিখুন (Please enter your delivery address).');
       return;
     }
 
@@ -451,6 +462,13 @@ export const CheckoutModal: React.FC = () => {
 
               {/* Action Buttons */}
               <div className="space-y-2 pt-1">
+                {formError && (
+                  <div className="p-3 bg-rose-500/15 border border-rose-500/40 rounded-xl text-rose-300 text-xs font-bold flex items-center gap-2">
+                    <span>⚠️</span>
+                    <span>{formError}</span>
+                  </div>
+                )}
+
                 {/* Confirm Order Button */}
                 <button
                   type="submit"
