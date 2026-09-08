@@ -1,0 +1,6 @@
+{
+  "name": "BODYBOND | Zero-Slip Wardrobe Security & Essentials",
+  "description": "The ultimate pro-grade, skin-safe, stain-free body adhesive & wardrobe essentials for plunge, backless & strapless outfits. Recreating bodybond.com.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

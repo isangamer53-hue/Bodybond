@@ -1,0 +1,95 @@
+import { Review } from '../types';
+
+export const REVIEWS: Review[] = [
+  {
+    id: 'rev-1',
+    productId: 'bodybond-glue',
+    productName: 'Bodybond Glue (20ml)',
+    author: 'Nusrat Jahan',
+    location: 'Dhanmondi, Dhaka',
+    rating: 5,
+    title: 'Biyer anusthane deep back blouse e 6 ghanta dance korechi!',
+    comment: 'Holuder rate bhari lehenga ar deep back blouse pore puro rat dance korechi. Shadharon fashion tape ghame khule jeto, kintu Bodybond Glue ek fota tei magicer moto atke chilo! Gorom ar ghameo ekdom tight chilo. Shower e kushum gorom panite ekdom smoothly uthe gese, kono rash hoyni. Mindblowing product!',
+    date: '1 din age',
+    verifiedPurchase: true,
+    outfitWorn: 'Deep Back Saree Blouse & Lehenga',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+    likes: 64
+  },
+  {
+    id: 'rev-2',
+    productId: 'bodybond-glue',
+    productName: 'Bodybond Glue (20ml)',
+    author: 'Tashfia Nawar',
+    location: 'Gulshan 2, Dhaka',
+    rating: 5,
+    title: 'Goodbye Safety Pins! Every girl in BD needs this glue',
+    comment: 'Honestly speaking, saree blouse ba plunging neckline dresse safety pin diye kapor nosto korar din shesh! Bodybond glue laganor por bujhai jay na je kichu lagano ache. Kapor ektu-o damage hoy na. Delivery-o matro 24 ghantar moddhe peyechi Dhakay. Super satisfied!',
+    date: '3 din age',
+    verifiedPurchase: true,
+    outfitWorn: 'Silk Saree & Plunging Blouse',
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80',
+    likes: 52
+  },
+  {
+    id: 'rev-3',
+    productId: 'bodybond-glue',
+    productName: 'Bodybond Glue (20ml)',
+    author: 'Samira Huq',
+    location: 'Uttara, Dhaka',
+    rating: 5,
+    title: 'Ghameo ektu-o alga hoy na, sensitive skin er jonno best!',
+    comment: 'Amar skin khub-i sensitive ar allergy prone. Age double sided tape lagale skin lal hoye jeto. Bodybond e Aloe Vera thakay skin e kono irritation hoyni. Warm water diye shohoje uthai felechi, kono sticky feeling thake na. Highly recommended!',
+    date: '1 shoptaho age',
+    verifiedPurchase: true,
+    outfitWorn: 'Off-Shoulder Party Dress',
+    image: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=600&q=80',
+    likes: 47
+  },
+  {
+    id: 'rev-4',
+    productId: 'bodybond-nips-seamless',
+    productName: 'Bodybond Seamless Nipple Covers',
+    author: 'Raisa Ahmed',
+    location: 'Panchlaish, Chittagong',
+    rating: 5,
+    title: 'Shada chikun kurti ar crop top e kono outline bujha jay na',
+    comment: 'Matte finish silicone pasties gulo darun. Thin edge er karone ekdom skin er shathe mishe thake. Hand wash kore onekbar re-use kora jay. Chittagong e Cash on Delivery te 2 din ei hate peyechi.',
+    date: '2 shoptaho age',
+    verifiedPurchase: true,
+    outfitWorn: 'White Linen Kurti & Halter Neck',
+    image: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
+    likes: 38
+  },
+  {
+    id: 'rev-5',
+    productId: 'bodybond-glue',
+    productName: 'Bodybond Glue (20ml)',
+    author: 'Farzana Kabir (Ritu)',
+    location: 'Banani, Dhaka',
+    rating: 5,
+    title: 'Corset & party dress e 100% wardrobe security!',
+    comment: 'Bodybond glue laganor por party te ja khushi tai dance korleo dress ektu-o shore na! Hot summer day teo ghame khule jayni. Ekdom lightweight and comfortable feel hoy. Must-have for every Bangladeshi girl!',
+    date: '3 shoptaho age',
+    verifiedPurchase: true,
+    outfitWorn: 'Fitted Bodysuit & Corset',
+    image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80',
+    likes: 41
+  },
+  {
+    id: 'rev-6',
+    productId: 'bodybond-glue',
+    productName: 'Bodybond Glue (20ml)',
+    author: 'Anika & Priyonti',
+    location: 'Sylhet Sadar',
+    rating: 5,
+    title: 'Ami ar amar bff 2ta glue niyechi, super satisfied!',
+    comment: 'Friend er biyete duijon-i shob dresse ei glue use korechi. Ektu-o dress slip koreni. Cash on Delivery system thakay order dewa khub shohoj chilo. Biyer shob dresse amader ekebare save korse!',
+    date: '1 mash age',
+    verifiedPurchase: true,
+    outfitWorn: 'Wedding Reception Outfits',
+    image: 'https://images.unsplash.com/photo-1511556532299-8f662fc26c06?auto=format&fit=crop&w=600&q=80',
+    likes: 59
+  }
+];
+

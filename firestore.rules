@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if string is valid
+    function isValidString(str, maxLen) {
+      return str is string && str.size() <= maxLen;
+    }
+
+    // Orders Collection
+    match /orders/{orderId} {
+      allow read: if true;
+      allow create: if request.resource.data.customerName is string
+                    && request.resource.data.customerPhone is string
+                    && request.resource.data.address is string;
+      allow update, delete: if true;
+    }
+
+    // Coupons Collection
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow write: if true;
+    }
+
+    // Store Settings / Config
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+
+    // Default deny fallback
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
