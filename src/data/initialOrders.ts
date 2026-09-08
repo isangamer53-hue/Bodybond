@@ -342,4 +342,5 @@ export const INITIAL_ANNOUNCEMENT: AnnouncementConfig = {
   offerCountdownMinutes: 51,
   offerCountdownSeconds: 11,
   offerCountdownLabel: 'OFFER ENDS IN',
+  offerTargetTimestamp: Date.now() + (11 * 3600 + 51 * 60 + 11) * 1000,
 };

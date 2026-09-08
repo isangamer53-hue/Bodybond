@@ -66,6 +66,7 @@ export interface AnnouncementConfig {
   offerCountdownMinutes?: number;
   offerCountdownSeconds?: number;
   offerCountdownLabel?: string;
+  offerTargetTimestamp?: number;
 }
 
 export interface LiveBuyerActivity {

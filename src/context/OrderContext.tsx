@@ -217,7 +217,37 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       (snap) => {
         if (snap.exists()) {
           const remoteData = snap.data() as Partial<AnnouncementConfig>;
-          setAnnouncement((prev) => ({ ...prev, ...remoteData }));
+          setAnnouncement((prev) => {
+            const merged = { ...prev, ...remoteData };
+            // If remote doesn't have offerTargetTimestamp or it's expired, generate one and save to DB
+            if (!merged.offerTargetTimestamp || merged.offerTargetTimestamp < Date.now()) {
+              const hrs = merged.offerCountdownHours ?? 11;
+              const mins = merged.offerCountdownMinutes ?? 51;
+              const secs = merged.offerCountdownSeconds ?? 11;
+              const durationMs = (hrs * 3600 + mins * 60 + secs) * 1000;
+              merged.offerTargetTimestamp = Date.now() + durationMs;
+
+              const sanitized = sanitizeFirestoreObject({ offerTargetTimestamp: merged.offerTargetTimestamp });
+              setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
+                handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');
+              });
+            }
+            return merged;
+          });
+        } else {
+          // Document doesn't exist yet in Firestore, create default with offerTargetTimestamp
+          const hrs = INITIAL_ANNOUNCEMENT.offerCountdownHours ?? 11;
+          const mins = INITIAL_ANNOUNCEMENT.offerCountdownMinutes ?? 51;
+          const secs = INITIAL_ANNOUNCEMENT.offerCountdownSeconds ?? 11;
+          const durationMs = (hrs * 3600 + mins * 60 + secs) * 1000;
+          const defaultData = {
+            ...INITIAL_ANNOUNCEMENT,
+            offerTargetTimestamp: Date.now() + durationMs,
+          };
+          const sanitized = sanitizeFirestoreObject(defaultData);
+          setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
+            handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');
+          });
         }
       },
       (err) => {
@@ -469,6 +499,19 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const updateAnnouncement = useCallback((config: Partial<AnnouncementConfig>) => {
     setAnnouncement(prev => {
       const updated = { ...prev, ...config };
+      if (
+        config.offerCountdownHours !== undefined || 
+        config.offerCountdownMinutes !== undefined || 
+        config.offerCountdownSeconds !== undefined ||
+        config.offerTargetTimestamp !== undefined
+      ) {
+        if (!config.offerTargetTimestamp) {
+          const hrs = updated.offerCountdownHours ?? 11;
+          const mins = updated.offerCountdownMinutes ?? 51;
+          const secs = updated.offerCountdownSeconds ?? 11;
+          updated.offerTargetTimestamp = Date.now() + (hrs * 3600 + mins * 60 + secs) * 1000;
+        }
+      }
       const sanitized = sanitizeFirestoreObject(updated);
       setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
         handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');

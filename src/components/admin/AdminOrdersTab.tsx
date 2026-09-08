@@ -386,7 +386,7 @@ export const AdminOrdersTab: React.FC<AdminOrdersTabProps> = ({ onShowNotificati
                       {ord.items.map((item, idx) => (
                         <div key={idx} className="flex justify-between text-gray-300">
                           <span className="truncate max-w-[150px]">{item.name} {item.selectedSize ? `(${item.selectedSize})` : ''} x{item.quantity}</span>
-                          <span className="font-semibold text-white">৳{(Math.round(item.priceNZD * 75) * item.quantity).toLocaleString()}</span>
+                          <span className="font-semibold text-white">৳{(item.priceNZD * item.quantity).toLocaleString()}</span>
                         </div>
                       ))}
                       <div className="border-t border-[#262632] pt-1.5 mt-1.5 space-y-0.5 text-[11px]">

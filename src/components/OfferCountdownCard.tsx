@@ -33,27 +33,44 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
     configHours * 3600 + configMinutes * 60 + configSeconds
   );
 
-  const [remainingSeconds, setRemainingSeconds] = useState<number>(totalDurationSeconds);
+  const isPreviewMode = previewHours !== undefined || previewMinutes !== undefined || previewSeconds !== undefined;
 
-  // Sync whenever duration or preview changes
+  const dbTargetTimestamp = announcement.offerTargetTimestamp;
+
+  const [remainingSeconds, setRemainingSeconds] = useState<number>(() => {
+    if (isPreviewMode) return totalDurationSeconds;
+    if (dbTargetTimestamp) {
+      const diff = Math.floor((dbTargetTimestamp - Date.now()) / 1000);
+      return diff > 0 ? diff : totalDurationSeconds;
+    }
+    return totalDurationSeconds;
+  });
+
+  // Sync and tick countdown based on real database target timestamp
   useEffect(() => {
-    setRemainingSeconds(totalDurationSeconds);
-  }, [totalDurationSeconds]);
+    if (isPreviewMode) {
+      setRemainingSeconds(totalDurationSeconds);
+      return;
+    }
 
-  // Live real-time countdown decrement
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setRemainingSeconds((prev) => {
-        if (prev <= 1) {
-          // Loop back so urgency never expires into zero or negative
-          return totalDurationSeconds;
-        }
-        return prev - 1;
-      });
-    }, 1000);
+    const updateTimer = () => {
+      const now = Date.now();
+      const target = dbTargetTimestamp || (now + totalDurationSeconds * 1000);
+      const diff = Math.floor((target - now) / 1000);
 
+      if (diff > 0) {
+        setRemainingSeconds(diff);
+      } else {
+        // Fallback smooth loop if expired
+        const loopRemaining = totalDurationSeconds > 0 ? Math.max(0, totalDurationSeconds + (diff % totalDurationSeconds)) : 0;
+        setRemainingSeconds(loopRemaining);
+      }
+    };
+
+    updateTimer();
+    const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
-  }, [totalDurationSeconds]);
+  }, [dbTargetTimestamp, totalDurationSeconds, isPreviewMode]);
 
   if (!isVisible) return null;
 

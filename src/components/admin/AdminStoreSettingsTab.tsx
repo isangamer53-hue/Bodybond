@@ -52,6 +52,11 @@ export const AdminStoreSettingsTab: React.FC<AdminStoreSettingsTabProps> = ({ on
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    const hrs = Number(countdownHours);
+    const mins = Number(countdownMinutes);
+    const secs = Number(countdownSeconds);
+    const targetMs = Date.now() + (hrs * 3600 + mins * 60 + secs) * 1000;
+
     updateAnnouncement({
       topBarText: topBarText.trim(),
       showTopBar,
@@ -59,10 +64,11 @@ export const AdminStoreSettingsTab: React.FC<AdminStoreSettingsTabProps> = ({ on
       outsideDhakaFeeBDT: Number(outsideDhakaFee),
       highlightBadgeText: highlightBadgeText.trim(),
       showOfferCountdown,
-      offerCountdownHours: Number(countdownHours),
-      offerCountdownMinutes: Number(countdownMinutes),
-      offerCountdownSeconds: Number(countdownSeconds),
-      offerCountdownLabel: countdownLabel.trim() || 'OFFER ENDS IN'
+      offerCountdownHours: hrs,
+      offerCountdownMinutes: mins,
+      offerCountdownSeconds: secs,
+      offerCountdownLabel: countdownLabel.trim() || 'OFFER ENDS IN',
+      offerTargetTimestamp: targetMs,
     });
     onShowNotification('Store Settings & Offer Countdown Timer updated successfully!');
   };
