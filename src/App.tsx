@@ -171,7 +171,7 @@ function MainStore() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-transparent text-[#1E141D] selection:bg-[#FF2D8D] selection:text-white pb-8 sm:pb-9">
+    <div className="min-h-screen flex flex-col bg-white text-[#1E141D] selection:bg-[#FF2D8D] selection:text-white pb-8 sm:pb-9">
       {/* Header */}
       <Header onNavigate={handleNavigate} activePage={activePage} onOpenAdmin={() => handleNavigate('admin')} />
 

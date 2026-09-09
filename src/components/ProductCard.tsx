@@ -64,7 +64,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
       onClick={handleCardClick}
     >
         {/* Image Container */}
-      <div className={`relative aspect-square w-full overflow-hidden bg-[#FFF5F8] ${isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
+      <div className={`relative aspect-square w-full overflow-hidden bg-white ${isSoldOut ? 'cursor-not-allowed' : 'cursor-pointer'}`}>
         <img
           src={activeImage}
           alt={product.name}
@@ -82,7 +82,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
             </span>
           ) : (
             product.badge && (
-              <span className="px-3 py-1 text-[10px] font-black tracking-wider uppercase rounded-full bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] text-white shadow-md border border-white/20">
+              <span className="px-3 py-1 text-[10px] font-black tracking-wider uppercase rounded-full bg-[#FF2D8D] text-white shadow-md border border-white/20">
                 {product.badge}
               </span>
             )
@@ -116,7 +116,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
               className={`w-full py-3 rounded-2xl text-xs font-black tracking-wider uppercase shadow-xl transition-all flex items-center justify-center gap-2 cursor-pointer ${
                 addedAnimation 
                   ? 'bg-emerald-600 text-white' 
-                  : 'bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] text-white hover:opacity-95 shadow-[#FF2D8D]/30'
+                  : 'bg-[#FF2D8D] text-white hover:bg-[#E61B78] shadow-[#FF2D8D]/30'
               }`}
             >
               {addedAnimation ? (
@@ -202,7 +202,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onSelectProdu
                 className={`px-2.5 py-1 text-[10px] font-bold rounded-lg border transition-colors ${
                   selectedSize === size
                     ? 'bg-[#FF2D8D] text-white border-[#FF2D8D]'
-                    : 'bg-[#FFEBF3] text-[#FF2D8D] border-[#F2D3E2] hover:bg-[#FFD6E8]'
+                    : 'bg-white text-[#FF2D8D] border-[#F2D3E2] hover:bg-white'
                 }`}
               >
                 {size}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { doc, onSnapshot, setDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { GalleryMediaItem, VideoReelItem, ConfidenceSlideItem, MediaConfig } from '../types';
 import { loadVideoBlobUrl, clearAllVideoBlobs } from '../utils/videoStorage';
@@ -187,178 +187,96 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [autoPlayVideos, setAutoPlayVideosState] = useState<boolean>(true);
   const [hasCustomChanges, setHasCustomChanges] = useState(false);
 
-  // Load from Firestore / localStorage on mount and listen for real-time updates
+  // Load from Firestore / localStorage on mount
   useEffect(() => {
     // 1. Initial local load
-    const loadLocalMedia = async () => {
+    const loadMediaData = async () => {
       try {
         const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('bodibond_custom_media_v2');
         if (saved) {
           const parsed: Partial<MediaConfig> = JSON.parse(saved);
-          if (parsed.galleryImages && Array.isArray(parsed.galleryImages) && parsed.galleryImages.length > 0) {
-            setGalleryImages(parsed.galleryImages);
-          }
-          if (parsed.nipsImages && Array.isArray(parsed.nipsImages) && parsed.nipsImages.length > 0) {
-            setNipsImages(parsed.nipsImages);
-          }
-          if (parsed.confidenceSlides && Array.isArray(parsed.confidenceSlides) && parsed.confidenceSlides.length > 0) {
-            setConfidenceSlides(parsed.confidenceSlides);
-          }
-          if (parsed.heroBanner && parsed.heroBanner.trim() !== '') {
-            setHeroBanner(parsed.heroBanner);
-          }
-          if (parsed.welcomeImage && parsed.welcomeImage.trim() !== '') {
-            setWelcomeImage(parsed.welcomeImage);
-          }
-          if (parsed.featuredGlueImage && parsed.featuredGlueImage.trim() !== '') {
-            setFeaturedGlueImage(parsed.featuredGlueImage);
-          }
-          if (parsed.followUsImage && parsed.followUsImage.trim() !== '') {
-            setFollowUsImage(parsed.followUsImage);
-          }
-          if (typeof parsed.autoPlayVideos === 'boolean') {
-            setAutoPlayVideosState(parsed.autoPlayVideos);
-          }
+          if (parsed.galleryImages) setGalleryImages(parsed.galleryImages);
+          if (parsed.nipsImages) setNipsImages(parsed.nipsImages);
+          if (parsed.confidenceSlides) setConfidenceSlides(parsed.confidenceSlides);
+          if (parsed.heroBanner) setHeroBanner(parsed.heroBanner);
+          if (parsed.welcomeImage) setWelcomeImage(parsed.welcomeImage);
+          if (parsed.featuredGlueImage) setFeaturedGlueImage(parsed.featuredGlueImage);
+          if (parsed.followUsImage) setFollowUsImage(parsed.followUsImage);
+          if (typeof parsed.autoPlayVideos === 'boolean') setAutoPlayVideosState(parsed.autoPlayVideos);
 
-          const targetReels = (parsed.videoReels && Array.isArray(parsed.videoReels) && parsed.videoReels.length > 0)
-            ? parsed.videoReels
-            : DEFAULT_VIDEO_REELS;
-
-          const sanitizedReels: VideoReelItem[] = await Promise.all(
-            targetReels.map(async (savedItem, idx) => {
+          if (parsed.videoReels && Array.isArray(parsed.videoReels)) {
+            const sanitizedReels = await Promise.all(parsed.videoReels.map(async (savedItem, idx) => {
               const def = DEFAULT_VIDEO_REELS[idx] || DEFAULT_VIDEO_REELS[0];
               let finalVideoUrl = savedItem.videoUrl;
               if (savedItem.hasCustomBlob) {
                 const storedBlobUrl = await loadVideoBlobUrl(savedItem.id || def.id);
-                if (storedBlobUrl) {
-                  finalVideoUrl = storedBlobUrl;
-                }
+                if (storedBlobUrl) finalVideoUrl = storedBlobUrl;
               }
-
-              if (!finalVideoUrl || finalVideoUrl.trim() === '' || finalVideoUrl.includes('assets.mixkit.co')) {
-                finalVideoUrl = def.videoUrl;
-              }
-
-              return {
-                id: savedItem.id || `reel-${Date.now()}-${idx}`,
-                title: savedItem.title || def.title,
-                badge: savedItem.badge || def.badge,
-                poster: savedItem.poster && savedItem.poster.trim() !== '' ? savedItem.poster : def.poster,
-                videoUrl: finalVideoUrl,
-                author: savedItem.author || def.author || '@bodybond.bd',
-                description: savedItem.description || def.description || ''
-              };
-            })
-          );
-
-          setVideoReels(sanitizedReels);
-          setHasCustomChanges(true);
-        } else {
-          setVideoReels(DEFAULT_VIDEO_REELS);
-        }
-      } catch (e) {
-        console.warn('Failed to parse saved local media config:', e);
-      }
-    };
-
-    loadLocalMedia();
-
-    // 2. Real-time Firestore sync (Modular documents to keep size < 100KB per document)
-    const unsubGallery = onSnapshot(doc(db, 'settings', 'media_gallery'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        if (data.galleryImages && Array.isArray(data.galleryImages) && data.galleryImages.length > 0) {
-          setGalleryImages(data.galleryImages);
-          setHasCustomChanges(true);
-        }
-      }
-    }, (err) => {
-      console.warn('Firestore gallery subscription error:', err);
-    });
-
-    const unsubNips = onSnapshot(doc(db, 'settings', 'media_nips'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        if (data.nipsImages && Array.isArray(data.nipsImages) && data.nipsImages.length > 0) {
-          setNipsImages(data.nipsImages);
-          setHasCustomChanges(true);
-        }
-      }
-    }, (err) => {
-      console.warn('Firestore nips subscription error:', err);
-    });
-
-    const unsubBanners = onSnapshot(doc(db, 'settings', 'media_banners'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        if (data.heroBanner && data.heroBanner.trim() !== '') setHeroBanner(data.heroBanner);
-        if (data.welcomeImage && data.welcomeImage.trim() !== '') setWelcomeImage(data.welcomeImage);
-        if (data.featuredGlueImage && data.featuredGlueImage.trim() !== '') setFeaturedGlueImage(data.featuredGlueImage);
-        if (data.followUsImage && data.followUsImage.trim() !== '') setFollowUsImage(data.followUsImage);
-        if (typeof data.autoPlayVideos === 'boolean') setAutoPlayVideosState(data.autoPlayVideos);
-        if (data.confidenceSlides && Array.isArray(data.confidenceSlides) && data.confidenceSlides.length > 0) {
-          setConfidenceSlides(data.confidenceSlides);
-        }
-        setHasCustomChanges(true);
-      }
-    }, (err) => {
-      console.warn('Firestore banners subscription error:', err);
-    });
-
-    const unsubReels = onSnapshot(doc(db, 'settings', 'media_reels'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        if (data.videoReels && Array.isArray(data.videoReels) && data.videoReels.length > 0) {
-          setVideoReels(data.videoReels);
-          setHasCustomChanges(true);
-        }
-      }
-    }, (err) => {
-      console.warn('Firestore reels subscription error:', err);
-    });
-
-    // 3. Real-time Security & Admin Password sync from Firestore
-    const unsubSecurity = onSnapshot(doc(db, 'settings', 'security'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        if (data.adminPassword && typeof data.adminPassword === 'string' && data.adminPassword.trim().length >= 3) {
-          const cloudPass = data.adminPassword.trim();
-          setAdminPassword(cloudPass);
-          try {
-            localStorage.setItem(PASSWORD_STORAGE_KEY, cloudPass);
-          } catch (e) {
-            console.warn('localStorage password sync warning:', e);
+              return { ...def, ...savedItem, videoUrl: finalVideoUrl || def.videoUrl };
+            }));
+            setVideoReels(sanitizedReels);
           }
+          setHasCustomChanges(true);
         }
-      }
-    }, (err) => {
-      console.warn('Firestore security subscription error:', err);
-    });
 
-    // 4. Fallback legacy sync if old single document exists
-    const unsubLegacy = onSnapshot(doc(db, 'settings', 'media'), (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data() as Partial<MediaConfig>;
-        if (data.galleryImages && Array.isArray(data.galleryImages) && data.galleryImages.length > 0) {
-          setGalleryImages(prev => prev === DEFAULT_GALLERY_IMAGES ? data.galleryImages! : prev);
-        }
-        if (data.nipsImages && Array.isArray(data.nipsImages) && data.nipsImages.length > 0) {
-          setNipsImages(prev => prev === DEFAULT_NIPS_IMAGES ? data.nipsImages! : prev);
-        }
-      }
-    }, (err) => {
-      console.warn('Firestore legacy media subscription warning:', err);
-    });
+        // 2. Optimized Firestore Fetch (One-time getDoc to save quota)
+        const fetchRemote = async () => {
+          try {
+            const [gal, nip, ban, rel, sec] = await Promise.all([
+              getDoc(doc(db, 'settings', 'media_gallery')),
+              getDoc(doc(db, 'settings', 'media_nips')),
+              getDoc(doc(db, 'settings', 'media_banners')),
+              getDoc(doc(db, 'settings', 'media_reels')),
+              getDoc(doc(db, 'settings', 'security'))
+            ]);
 
-    return () => {
-      unsubGallery();
-      unsubNips();
-      unsubBanners();
-      unsubReels();
-      unsubSecurity();
-      unsubLegacy();
+            if (gal.exists()) setGalleryImages(gal.data().galleryImages);
+            if (nip.exists()) setNipsImages(nip.data().nipsImages);
+            if (rel.exists()) setVideoReels(rel.data().videoReels);
+            if (ban.exists()) {
+              const d = ban.data();
+              if (d.heroBanner) setHeroBanner(d.heroBanner);
+              if (d.welcomeImage) setWelcomeImage(d.welcomeImage);
+              if (d.featuredGlueImage) setFeaturedGlueImage(d.featuredGlueImage);
+              if (d.followUsImage) setFollowUsImage(d.followUsImage);
+              if (d.confidenceSlides) setConfidenceSlides(d.confidenceSlides);
+            }
+            if (sec.exists() && sec.data().adminPassword) {
+              setAdminPassword(sec.data().adminPassword);
+            }
+          } catch (e) {
+            console.warn('Firestore initial fetch skipped (likely quota or offline):', e);
+          }
+        };
+
+        fetchRemote();
+      } catch (e) {
+        console.warn('Failed to load media config:', e);
+      }
     };
-  }, []);
+
+    loadMediaData();
+
+    // 3. Optional: Real-time sync ONLY for authenticated admins
+    let unsubs: (() => void)[] = [];
+    if (isAdminAuthenticated) {
+      unsubs = [
+        onSnapshot(doc(db, 'settings', 'media_gallery'), (s) => s.exists() && setGalleryImages(s.data().galleryImages)),
+        onSnapshot(doc(db, 'settings', 'media_nips'), (s) => s.exists() && setNipsImages(s.data().nipsImages)),
+        onSnapshot(doc(db, 'settings', 'media_reels'), (s) => s.exists() && setVideoReels(s.data().videoReels)),
+        onSnapshot(doc(db, 'settings', 'media_banners'), (s) => {
+          if (s.exists()) {
+            const d = s.data();
+            if (d.heroBanner) setHeroBanner(d.heroBanner);
+            if (d.welcomeImage) setWelcomeImage(d.welcomeImage);
+            if (d.confidenceSlides) setConfidenceSlides(d.confidenceSlides);
+          }
+        })
+      ];
+    }
+
+    return () => unsubs.forEach(fn => fn());
+  }, [isAdminAuthenticated]);
 
   // Save changes to localStorage AND Firestore safely in modular docs (< 1MB)
   const persistConfig = async (

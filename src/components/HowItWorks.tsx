@@ -60,7 +60,7 @@ export const HowItWorks: React.FC = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-xs font-black text-[#FF2D8D] border border-[#F2D3E2] tracking-widest uppercase shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-xs font-black text-[#FF2D8D] border border-[#F2D3E2] tracking-widest uppercase shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>Complete Styling & Usage Guide</span>
           </div>
@@ -77,7 +77,7 @@ export const HowItWorks: React.FC = () => {
               onClick={() => setActiveTab('glue')}
               className={`px-6 py-2.5 rounded-full text-xs font-black tracking-wider uppercase transition-all cursor-pointer min-h-[44px] ${
                 activeTab === 'glue'
-                  ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
                   : 'text-[#7A5E70] hover:text-[#1E141D]'
               }`}
             >
@@ -87,7 +87,7 @@ export const HowItWorks: React.FC = () => {
               onClick={() => setActiveTab('nips')}
               className={`px-6 py-2.5 rounded-full text-xs font-black tracking-wider uppercase transition-all cursor-pointer min-h-[44px] ${
                 activeTab === 'nips'
-                  ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
                   : 'text-[#7A5E70] hover:text-[#1E141D]'
               }`}
             >
@@ -103,10 +103,10 @@ export const HowItWorks: React.FC = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#F2D3E2] shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-[#FF2D8D] transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="p-3 rounded-2xl bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25">
+                <span className="p-3 rounded-2xl bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25">
                   <MapPin className="w-6 h-6" />
                 </span>
-                <span className="text-[11px] font-black tracking-wider uppercase bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] px-2.5 py-1 rounded-full">
+                <span className="text-[11px] font-black tracking-wider uppercase bg-white text-[#FF2D8D] border border-[#F2D3E2] px-2.5 py-1 rounded-full">
                   EVERY OUTFIT
                 </span>
               </div>
@@ -145,10 +145,10 @@ export const HowItWorks: React.FC = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#F2D3E2] shadow-md relative overflow-hidden flex flex-col justify-between group hover:border-[#FF2D8D] transition-all">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="p-3 rounded-2xl bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25">
+                <span className="p-3 rounded-2xl bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25">
                   <Sparkles className="w-6 h-6" />
                 </span>
-                <span className="text-[11px] font-black tracking-wider uppercase bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
+                <span className="text-[11px] font-black tracking-wider uppercase bg-white text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
                   EASY 3 STEPS
                 </span>
               </div>
@@ -186,7 +186,7 @@ export const HowItWorks: React.FC = () => {
                 <span className="p-3 rounded-2xl bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25">
                   <RotateCcw className="w-6 h-6" />
                 </span>
-                <span className="text-[11px] font-black tracking-wider uppercase bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] px-2.5 py-1 rounded-full">
+                <span className="text-[11px] font-black tracking-wider uppercase bg-white text-[#FF2D8D] border border-[#F2D3E2] px-2.5 py-1 rounded-full">
                   PAIN FREE
                 </span>
               </div>
@@ -233,7 +233,7 @@ export const HowItWorks: React.FC = () => {
                   <span className="text-4xl font-black text-[#F2D3E2] group-hover:text-[#FF2D8D] transition-colors">
                     {item.step}
                   </span>
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFEBF3] border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
+                  <div className="w-12 h-12 rounded-2xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
                     <Icon className="w-6 h-6 text-[#FF2D8D]" />
                   </div>
                 </div>
@@ -244,7 +244,7 @@ export const HowItWorks: React.FC = () => {
                 </div>
 
                 {/* Pro tip pill */}
-                <div className="mt-6 pt-4 border-t border-[#F2D3E2] flex items-start gap-2 text-xs text-[#5E3F54] bg-[#FFF5F8] p-3 rounded-xl">
+                <div className="mt-6 pt-4 border-t border-[#F2D3E2] flex items-start gap-2 text-xs text-[#5E3F54] bg-white border border-[#F2D3E2] p-3 rounded-xl">
                   <Check className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
                   <span><strong className="text-[#1E141D]">Pro Tip:</strong> {item.tip}</span>
                 </div>

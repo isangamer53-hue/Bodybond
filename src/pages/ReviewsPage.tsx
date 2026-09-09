@@ -186,11 +186,11 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="bg-transparent min-h-screen pb-24 text-[#1E141D] relative overflow-hidden">
+    <div className="bg-white min-h-screen pb-24 text-[#1E141D] relative overflow-hidden">
       {/* Header Banner */}
-      <div className="bg-gradient-to-b from-white via-[#FFF5F8] to-transparent border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+      <div className="bg-white border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <div className="max-w-7xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFEBF3] border border-[#F2D3E2] text-xs font-bold text-[#FF2D8D] tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#F2D3E2] text-xs font-bold text-[#FF2D8D] tracking-wider uppercase shadow-sm">
             <Heart className="w-3.5 h-3.5 fill-[#FF2D8D]" />
             <span>2,500+ Verified Customer Reviews</span>
           </div>
@@ -241,9 +241,9 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
               ].map((bar) => (
                 <div key={bar.stars} className="flex items-center gap-3 text-xs text-[#5E3F54]">
                   <span className="w-14 font-semibold">{bar.stars} Stars</span>
-                  <div className="flex-1 h-2.5 bg-[#FFF0F5] rounded-full overflow-hidden">
+                  <div className="flex-1 h-2.5 bg-white border border-[#F2D3E2] rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] rounded-full" 
+                      className="h-full bg-[#FF2D8D] rounded-full" 
                       style={{ width: `${bar.pct}%` }} 
                     />
                   </div>
@@ -256,7 +256,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
             <div className="md:col-span-3 text-center md:text-right space-y-3">
               <button
                 onClick={() => setShowWriteModal(true)}
-                className="w-full sm:w-auto px-6 py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider rounded-2xl transition-all shadow-md shadow-[#FF2D8D]/25 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02]"
+                className="w-full sm:w-auto px-6 py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-bold uppercase tracking-wider rounded-2xl transition-all shadow-md shadow-[#FF2D8D]/25 flex items-center justify-center gap-2 cursor-pointer hover:scale-[1.02]"
               >
                 <Plus className="w-4 h-4" />
                 <span>Write A Review</span>
@@ -278,8 +278,8 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
               onClick={() => setFilterRating('all')}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 filterRating === 'all'
-                  ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
-                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-[#FFEBF3]'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
+                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white'
               }`}
             >
               All Ratings
@@ -288,8 +288,8 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
               onClick={() => setFilterRating(5)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                 filterRating === 5
-                  ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
-                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-[#FFEBF3]'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
+                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white'
               }`}
             >
               <span>★ 5 Stars</span>
@@ -298,8 +298,8 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
               onClick={() => setFilterPhotosOnly(!filterPhotosOnly)}
               className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
                 filterPhotosOnly
-                  ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
-                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-[#FFEBF3]'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25'
+                  : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white'
               }`}
             >
               <Camera className="w-3.5 h-3.5" />
@@ -351,11 +351,11 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
 
                 {/* Product & Outfit badges */}
                 <div className="pt-1 flex flex-wrap items-center gap-1.5 text-[11px]">
-                  <span className="px-2.5 py-1 bg-[#FFEBF3] border border-[#F2D3E2] rounded-lg text-[#FF2D8D] font-semibold">
+                  <span className="px-2.5 py-1 bg-white border border-[#F2D3E2] rounded-lg text-[#FF2D8D] font-semibold">
                     {rev.productName}
                   </span>
                   {rev.outfitWorn && (
-                    <span className="px-2 py-0.5 bg-[#FFF5F8] text-[#5E3F54] rounded-lg border border-[#F2D3E2]">
+                    <span className="px-2 py-0.5 bg-white text-[#5E3F54] rounded-lg border border-[#F2D3E2]">
                       👗 {rev.outfitWorn}
                     </span>
                   )}
@@ -408,7 +408,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                   <button 
                     type="button" 
                     onClick={() => setShowWriteModal(false)}
-                    className="p-1 text-[#7A5E70] hover:text-[#1E141D] rounded-full bg-[#FFEBF3]"
+                    className="p-1 text-[#7A5E70] hover:text-[#1E141D] rounded-full bg-white border border-[#F2D3E2]"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -440,7 +440,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                       placeholder="e.g. Sumaiya Islam"
                       value={newName}
                       onChange={(e) => setNewName(e.target.value)}
-                      className="w-full px-3 py-2 text-xs bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
                     />
                   </div>
                   <div className="space-y-1">
@@ -450,7 +450,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                       placeholder="e.g. Banani, Dhaka"
                       value={newLocation}
                       onChange={(e) => setNewLocation(e.target.value)}
-                      className="w-full px-3 py-2 text-xs bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
+                      className="w-full px-3 py-2 text-xs bg-white border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
                     />
                   </div>
                 </div>
@@ -460,7 +460,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                   <select
                     value={newProduct}
                     onChange={(e) => setNewProduct(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#F2D3E2] rounded-xl text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
                   >
                     <option value="Bodybond Body Glue (20ml)">Bodybond Body Glue (20ml)</option>
                     <option value="Bodybond Seamless Nipple Covers (Sold Out)">Bodybond Seamless Nipple Covers (Sold Out)</option>
@@ -475,7 +475,7 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                     placeholder="e.g. Held firmly all evening!"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
                   />
                 </div>
 
@@ -487,13 +487,13 @@ export const ReviewsPage: React.FC<ReviewsPageProps> = ({ onNavigate }) => {
                     placeholder="Tell us what outfit you wore and how long it lasted..."
                     value={newBody}
                     onChange={(e) => setNewBody(e.target.value)}
-                    className="w-full px-3 py-2 text-xs bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
+                    className="w-full px-3 py-2 text-xs bg-white border border-[#F2D3E2] rounded-xl text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D]"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider rounded-2xl transition-all cursor-pointer shadow-md shadow-[#FF2D8D]/25"
+                  className="w-full py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-bold uppercase tracking-wider rounded-2xl transition-all cursor-pointer shadow-md shadow-[#FF2D8D]/25"
                 >
                   Submit Verified Review
                 </button>

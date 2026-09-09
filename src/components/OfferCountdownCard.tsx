@@ -83,7 +83,7 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
   return (
     <div
       id="offer-countdown-card"
-      className={`w-full rounded-2xl sm:rounded-3xl bg-gradient-to-b from-[#21111F] via-[#170B16] to-[#10060F] border border-[#FF2D8D]/35 p-4 sm:p-5 shadow-lg shadow-[#FF2D8D]/10 text-center relative overflow-hidden ${className}`}
+      className={`w-full rounded-2xl sm:rounded-3xl bg-white border border-[#FF2D8D] p-4 sm:p-5 shadow-lg shadow-[#FF2D8D]/10 text-center relative overflow-hidden ${className}`}
     >
       {/* Subtle ambient pink background glow */}
       <div className="absolute inset-0 bg-radial from-[#FF2D8D]/10 via-transparent to-transparent pointer-events-none" />
@@ -93,11 +93,11 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
         <div className="flex items-center justify-center gap-2 sm:gap-3">
           
           {/* Hours block */}
-          <div className="flex flex-col items-center justify-center bg-[#0C040B] border border-white/10 rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-inner">
-            <span className="text-white font-extrabold text-2xl sm:text-3xl font-mono leading-none tracking-tight">
+          <div className="flex flex-col items-center justify-center bg-white border border-[#F2D3E2] rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-sm">
+            <span className="text-[#FF2D8D] font-extrabold text-2xl sm:text-3xl font-mono leading-none tracking-tight">
               {pad(hours)}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-pink-300/70 mt-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#FF2D8D]/70 mt-1">
               HRS
             </span>
           </div>
@@ -108,11 +108,11 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
           </span>
 
           {/* Minutes block */}
-          <div className="flex flex-col items-center justify-center bg-[#0C040B] border border-white/10 rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-inner">
-            <span className="text-white font-extrabold text-2xl sm:text-3xl font-mono leading-none tracking-tight">
+          <div className="flex flex-col items-center justify-center bg-white border border-[#F2D3E2] rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-sm">
+            <span className="text-[#FF2D8D] font-extrabold text-2xl sm:text-3xl font-mono leading-none tracking-tight">
               {pad(minutes)}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-pink-300/70 mt-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#FF2D8D]/70 mt-1">
               MIN
             </span>
           </div>
@@ -123,11 +123,11 @@ export const OfferCountdownCard: React.FC<OfferCountdownCardProps> = ({
           </span>
 
           {/* Seconds block */}
-          <div className="flex flex-col items-center justify-center bg-[#0C040B] border border-white/10 rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-inner">
+          <div className="flex flex-col items-center justify-center bg-white border border-[#F2D3E2] rounded-xl sm:rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 min-w-[58px] sm:min-w-[68px] shadow-sm">
             <span className="text-[#FF2D8D] font-extrabold text-2xl sm:text-3xl font-mono leading-none tracking-tight">
               {pad(seconds)}
             </span>
-            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-pink-300/70 mt-1">
+            <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-[#FF2D8D]/70 mt-1">
               SEC
             </span>
           </div>

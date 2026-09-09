@@ -43,12 +43,12 @@ export const HowToRemovePage: React.FC<PageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="bg-transparent text-[#1E141D] min-h-screen font-sans pb-24">
+    <div className="bg-white text-[#1E141D] min-h-screen font-sans pb-24">
       
       {/* Page Header Banner */}
-      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-gradient-to-b from-white via-[#FFF5F8] to-transparent overflow-hidden text-center">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-white overflow-hidden text-center">
         <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
             <RotateCcw className="w-4 h-4 text-[#FF2D8D]" />
             <span>PAIN-FREE & WATER SOLUBLE</span>
           </div>
@@ -93,7 +93,7 @@ export const HowToRemovePage: React.FC<PageProps> = ({ onNavigate }) => {
                 className="bg-white border-2 border-[#F2D3E2] hover:border-[#FF2D8D] rounded-3xl p-6 shadow-md hover:shadow-xl transition-all group flex flex-col justify-between"
               >
                 <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white flex items-center justify-center shadow-md shadow-[#FF2D8D]/25 font-bold">
+                  <div className="w-12 h-12 rounded-2xl bg-[#FF2D8D] text-white flex items-center justify-center shadow-md shadow-[#FF2D8D]/25 font-bold">
                     <Icon className="w-6 h-6" />
                   </div>
 

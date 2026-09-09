@@ -20,11 +20,11 @@ interface HowItWorksPageProps {
 
 export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) => {
   return (
-    <div className="bg-transparent min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D]">
+    <div className="bg-white min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D]">
       {/* Page Header */}
-      <div className="bg-gradient-to-b from-white via-[#FFF5F8] to-transparent border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 text-center">
+      <div className="bg-white border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>The Science of Secure Styling • কীভাবে কাজ করে</span>
           </div>
@@ -71,7 +71,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
               { name: 'Party Lycra/Spandex', result: 'Sweat Proof', badge: 'Verified' },
               { name: 'Delicate Floral Lace', result: 'No Snagging', badge: 'Verified' },
             ].map((fabric, idx) => (
-              <div key={idx} className="p-4 bg-[#FFF5F8] rounded-2xl border border-[#F2D3E2] text-center space-y-1">
+              <div key={idx} className="p-4 bg-white rounded-2xl border border-[#F2D3E2] text-center space-y-1">
                 <Shirt className="w-5 h-5 text-[#FF2D8D] mx-auto" />
                 <span className="block text-xs font-bold text-[#1E141D] pt-1">{fabric.name}</span>
                 <span className="block text-[10px] text-emerald-600 font-bold">{fabric.result}</span>
@@ -80,7 +80,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
           </div>
 
           {/* Removal Tips */}
-          <div className="p-5 sm:p-6 bg-[#FFF5F8] rounded-2xl border border-[#F2D3E2] flex flex-col md:flex-row items-center justify-between gap-5">
+          <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#F2D3E2] flex flex-col md:flex-row items-center justify-between gap-5">
             <div className="space-y-1 text-center md:text-left">
               <h3 className="font-black text-sm text-[#1E141D]">Pain-Free Removal in 30 Seconds</h3>
               <p className="text-xs text-[#5E3F54] max-w-xl leading-relaxed font-medium">
@@ -89,7 +89,7 @@ export const HowItWorksPage: React.FC<HowItWorksPageProps> = ({ onNavigate }) =>
             </div>
             <button
               onClick={() => onNavigate('shop')}
-              className="px-8 py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-md flex-shrink-0 cursor-pointer min-h-[44px] flex items-center justify-center shadow-[#FF2D8D]/25"
+              className="px-8 py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-black uppercase tracking-wider rounded-2xl transition-all shadow-md flex-shrink-0 cursor-pointer min-h-[44px] flex items-center justify-center shadow-[#FF2D8D]/25"
             >
               Shop Bodybond Essentials
             </button>

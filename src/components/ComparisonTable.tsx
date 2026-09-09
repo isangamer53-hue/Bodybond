@@ -48,11 +48,11 @@ export const ComparisonTable: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-24 bg-[#FAF7F2]">
+    <section className="py-16 sm:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3EDE6] text-xs font-bold text-[#E27D60] tracking-widest uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-xs font-bold text-[#FF2D8D] tracking-widest uppercase border border-[#F2D3E2]">
             <Sparkles className="w-3.5 h-3.5" />
             <span>The Bodybond Difference</span>
           </div>
@@ -65,34 +65,34 @@ export const ComparisonTable: React.FC = () => {
         </div>
 
         {/* Comparison Table Container */}
-        <div className="overflow-x-auto rounded-3xl border border-[#E2DAD0] bg-white shadow-lg">
+        <div className="overflow-x-auto rounded-3xl border border-[#F2D3E2] bg-white shadow-lg">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-[#E8E1D9]">
-                <th className="p-5 sm:p-6 text-sm font-bold text-[#1A1817] bg-[#FAF7F2] w-1/3">
+              <tr className="border-b border-[#F2D3E2]">
+                <th className="p-5 sm:p-6 text-sm font-bold text-[#1A1817] bg-white w-1/3">
                   Feature / Performance
                 </th>
-                <th className="p-5 sm:p-6 text-sm font-extrabold text-[#FAF7F2] bg-[#1A1817] w-1/4 rounded-t-2xl relative">
+                <th className="p-5 sm:p-6 text-sm font-extrabold text-white bg-[#1E141D] w-1/4 rounded-t-2xl relative">
                   <div className="flex items-center gap-1.5">
                     <span className="text-base font-brand tracking-wider">BODYBOND</span>
-                    <span className="px-2 py-0.5 text-[9px] bg-[#E27D60] text-white rounded-full font-bold">WINNER</span>
+                    <span className="px-2 py-0.5 text-[9px] bg-[#FF2D8D] text-white rounded-full font-bold">WINNER</span>
                   </div>
                 </th>
-                <th className="p-5 sm:p-6 text-xs sm:text-sm font-semibold text-[#7A7169] bg-[#F9F6F2] w-1/5">
+                <th className="p-5 sm:p-6 text-xs sm:text-sm font-semibold text-[#7A7169] bg-white w-1/5">
                   Double-Sided Tape
                 </th>
-                <th className="p-5 sm:p-6 text-xs sm:text-sm font-semibold text-[#7A7169] bg-[#F9F6F2] w-1/5">
+                <th className="p-5 sm:p-6 text-xs sm:text-sm font-semibold text-[#7A7169] bg-white w-1/5">
                   Standard Boob Tape
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#EFE9E2] text-xs sm:text-sm">
+            <tbody className="divide-y divide-[#F2D3E2] text-xs sm:text-sm">
               {comparisonRows.map((row, index) => (
-                <tr key={index} className="hover:bg-[#FAF7F2]/60 transition-colors">
+                <tr key={index} className="hover:bg-white transition-colors">
                   <td className="p-5 sm:p-6 font-semibold text-[#2E2A27]">
                     {row.feature}
                   </td>
-                  <td className="p-5 sm:p-6 font-bold text-[#1A1817] bg-[#F9F6F2]/80 border-x border-[#E8E1D9]">
+                  <td className="p-5 sm:p-6 font-bold text-[#1E141D] bg-white border-x border-[#F2D3E2]">
                     <div className="flex items-center gap-2">
                       <div className="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 flex-shrink-0">
                         <Check className="w-3.5 h-3.5" />

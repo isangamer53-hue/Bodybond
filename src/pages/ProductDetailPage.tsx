@@ -271,7 +271,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <h1 className="text-3xl sm:text-4xl font-black text-[#1E141D] tracking-tight">
               Bodybond Glue
             </h1>
-            <span className="px-3 py-1 text-[11px] font-black uppercase tracking-wider rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2]">
+            <span className="px-3 py-1 text-[11px] font-black uppercase tracking-wider rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2]">
               {currentSizeLabel} Selected
             </span>
           </div>
@@ -323,7 +323,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             onClick={() => setPurchaseTier('1x')}
             className={`p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between shadow-sm ${
               purchaseTier === '1x'
-                ? 'border-[#FF2D8D] bg-[#FFEBF3] ring-1 ring-[#FF2D8D]'
+                ? 'border-[#FF2D8D] bg-white ring-1 ring-[#FF2D8D]'
                 : 'border-[#F2D3E2] bg-white hover:border-[#FF2D8D]/50'
             }`}
           >
@@ -362,7 +362,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             onClick={() => setPurchaseTier('2x')}
             className={`rounded-2xl border transition-all cursor-pointer overflow-hidden shadow-sm ${
               purchaseTier === '2x'
-                ? 'border-[#FF2D8D] bg-[#FFEBF3] ring-1 ring-[#FF2D8D]'
+                ? 'border-[#FF2D8D] bg-white ring-1 ring-[#FF2D8D]'
                 : 'border-[#F2D3E2] bg-white hover:border-[#FF2D8D]/50'
             }`}
           >
@@ -435,7 +435,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 className={`w-full py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold tracking-widest uppercase transition-all shadow-sm cursor-pointer flex items-center justify-center gap-2 border ${
                   addedAnimation
                     ? 'bg-emerald-600 text-white border-emerald-500'
-                    : 'bg-white hover:bg-[#FFEBF3] text-[#1E141D] border-[#F2D3E2]'
+                    : 'bg-white hover:bg-white text-[#1E141D] border-[#F2D3E2]'
                 }`}
               >
                 {addedAnimation ? (
@@ -497,7 +497,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               <button
                 onClick={() => onNavigate('where-to-use')}
-                className="p-3 bg-white hover:bg-[#FFEBF3] border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
+                className="p-3 bg-white hover:bg-white border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
               >
                 <MapPin className="w-5 h-5 text-[#FF2D8D] group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] sm:text-xs font-black text-[#1E141D] uppercase tracking-wider">WHERE TO USE</span>
@@ -506,7 +506,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               <button
                 onClick={() => onNavigate('how-to-use')}
-                className="p-3 bg-white hover:bg-[#FFEBF3] border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
+                className="p-3 bg-white hover:bg-white border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
               >
                 <Sparkles className="w-5 h-5 text-emerald-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] sm:text-xs font-black text-[#1E141D] uppercase tracking-wider">HOW TO USE</span>
@@ -515,7 +515,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
               <button
                 onClick={() => onNavigate('how-to-remove')}
-                className="p-3 bg-white hover:bg-[#FFEBF3] border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
+                className="p-3 bg-white hover:bg-white border border-[#F2D3E2] hover:border-[#FF2D8D] rounded-2xl text-center flex flex-col items-center justify-center gap-1.5 transition-all group cursor-pointer shadow-sm"
               >
                 <RotateCcw className="w-5 h-5 text-cyan-600 group-hover:scale-110 transition-transform" />
                 <span className="text-[11px] sm:text-xs font-black text-[#1E141D] uppercase tracking-wider">HOW TO REMOVE</span>
@@ -694,7 +694,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           {/* Write a Review Button */}
           <button
             onClick={() => setWriteReviewOpen(!writeReviewOpen)}
-            className="w-full py-3 px-4 rounded-2xl border border-[#F2D3E2] bg-white hover:bg-[#FFEBF3] text-xs font-bold uppercase tracking-wider text-[#1E141D] transition-all cursor-pointer text-center shadow-sm"
+            className="w-full py-3 px-4 rounded-2xl border border-[#F2D3E2] bg-white hover:bg-white text-xs font-bold uppercase tracking-wider text-[#1E141D] transition-all cursor-pointer text-center shadow-sm"
           >
             Write a review
           </button>
@@ -721,7 +721,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       placeholder="e.g. Samira Ahmed (Dhanmondi, Dhaka)"
                       value={newReviewAuthor}
                       onChange={(e) => setNewReviewAuthor(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#FFFDFE] border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
+                      className="w-full px-3 py-2 bg-white border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
                     />
                   </div>
 
@@ -749,7 +749,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       placeholder="Share how Bodybond held your saree blouse, lehenga or party dress..."
                       value={newReviewText}
                       onChange={(e) => setNewReviewText(e.target.value)}
-                      className="w-full px-3 py-2 bg-[#FFFDFE] border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
+                      className="w-full px-3 py-2 bg-white border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] focus:outline-none focus:border-[#FF2D8D]"
                     />
                   </div>
 
@@ -815,7 +815,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               
               <button
                 onClick={handleAddToCart}
-                className="p-3 rounded-xl bg-[#FFEBF3] hover:bg-[#FFD6E8] border border-[#F2D3E2] text-[#FF2D8D] shadow-sm transition-all cursor-pointer flex items-center justify-center"
+                className="p-3 rounded-xl bg-white hover:bg-white border border-[#F2D3E2] text-[#FF2D8D] shadow-sm transition-all cursor-pointer flex items-center justify-center"
                 aria-label="Add to cart"
                 title={t.addToCart}
               >

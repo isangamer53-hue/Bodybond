@@ -38,12 +38,12 @@ export const HowToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="bg-transparent text-[#1E141D] min-h-screen font-sans pb-24">
+    <div className="bg-white text-[#1E141D] min-h-screen font-sans pb-24">
       
       {/* Page Header Banner */}
-      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-gradient-to-b from-white via-[#FFF5F8] to-transparent overflow-hidden text-center">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-white overflow-hidden text-center">
         <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
             <Sparkles className="w-4 h-4 text-[#FF2D8D]" />
             <span>30-SECOND APPLICATION GUIDE</span>
           </div>
@@ -86,10 +86,10 @@ export const HowToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
             >
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="w-10 h-10 rounded-2xl bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white font-black text-lg flex items-center justify-center shadow-md shadow-[#FF2D8D]/25">
+                  <span className="w-10 h-10 rounded-2xl bg-[#FF2D8D] text-white font-black text-lg flex items-center justify-center shadow-md shadow-[#FF2D8D]/25">
                     {step.num}
                   </span>
-                  <span className="px-3 py-1 bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] font-black text-[10px] tracking-wider uppercase rounded-full">
+                  <span className="px-3 py-1 bg-white text-[#FF2D8D] border border-[#F2D3E2] font-black text-[10px] tracking-wider uppercase rounded-full">
                     {step.time}
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export const HowToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
                   {step.desc}
                 </p>
 
-                <div className="p-3 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] text-xs text-[#992257] flex items-start gap-2">
+                <div className="p-3 rounded-2xl bg-white border border-[#F2D3E2] text-xs text-[#992257] flex items-start gap-2">
                   <Flame className="w-4 h-4 text-[#FF2D8D] flex-shrink-0 mt-0.5" />
                   <span><strong>প্রো-টিপ:</strong> {step.tips}</span>
                 </div>

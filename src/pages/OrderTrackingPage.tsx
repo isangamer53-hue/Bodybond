@@ -45,11 +45,11 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
     }
   }, [orders]);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputQuery.trim()) return;
 
-    const result = searchOrder(inputQuery);
+    const result = await searchOrder(inputQuery);
     setCurrentOrder(result);
     setSearched(true);
   };
@@ -71,7 +71,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
       case 'shipped':
         return { label: 'In Transit with Courier', bg: 'bg-indigo-50 text-indigo-800 border-indigo-200', icon: Truck };
       case 'out_for_delivery':
-        return { label: 'Out for Delivery Today', bg: 'bg-[#FFEBF3] text-[#FF2D8D] border-[#F2D3E2]', icon: Truck };
+        return { label: 'Out for Delivery Today', bg: 'bg-white text-[#FF2D8D] border-[#F2D3E2]', icon: Truck };
       case 'delivered':
         return { label: 'Delivered & Paid', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200', icon: CheckCircle2 };
       case 'cancelled':
@@ -82,7 +82,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
   };
 
   return (
-    <div className="bg-transparent min-h-[85vh] py-8 sm:py-16 px-4 sm:px-6 lg:px-8 text-[#1E141D]">
+    <div className="bg-white min-h-[85vh] py-8 sm:py-16 px-4 sm:px-6 lg:px-8 text-[#1E141D]">
       <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         
         {/* Back Link & Header */}
@@ -95,7 +95,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
             <span>Back to Home</span>
           </button>
 
-          <span className="px-3.5 py-1.5 bg-[#FFEBF3] text-[#FF2D8D] font-black text-xs uppercase tracking-wider rounded-full border border-[#F2D3E2] self-start sm:self-auto shadow-sm">
+          <span className="px-3.5 py-1.5 bg-white text-[#FF2D8D] font-black text-xs uppercase tracking-wider rounded-full border border-[#F2D3E2] self-start sm:self-auto shadow-sm">
             ⚡ Live Courier Tracking • No Login Required
           </span>
         </div>
@@ -119,14 +119,14 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                 value={inputQuery}
                 onChange={(e) => setInputQuery(e.target.value)}
                 placeholder="Enter Order ID (e.g. BD-892415) or Phone Number"
-                className="w-full pl-11 pr-4 py-3.5 bg-[#FFF5F8] border border-[#F2D3E2] rounded-2xl text-xs sm:text-sm font-medium text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D] transition-all"
+                className="w-full pl-11 pr-4 py-3.5 bg-white border border-[#F2D3E2] rounded-2xl text-xs sm:text-sm font-medium text-[#1E141D] placeholder:text-[#7A5E70]/50 focus:outline-none focus:border-[#FF2D8D] transition-all"
               />
               <Search className="w-5 h-5 text-[#FF2D8D] absolute left-3.5 top-1/2 -translate-y-1/2" />
             </div>
 
             <button
               type="submit"
-              className="px-7 py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white font-black text-xs sm:text-sm rounded-2xl shadow-md shadow-[#FF2D8D]/25 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
+              className="px-7 py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white font-black text-xs sm:text-sm rounded-2xl shadow-md shadow-[#FF2D8D]/25 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[44px]"
             >
               <span>Track Parcel</span>
               <ChevronRight className="w-4 h-4" />
@@ -144,7 +144,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                 <div className="space-y-1">
                   <div className="flex items-center gap-2.5 flex-wrap">
                     <span className="text-xs text-[#5E3F54] uppercase font-bold tracking-wider">Order ID</span>
-                    <div className="flex items-center gap-1.5 bg-[#FFF5F8] px-3 py-1 rounded-xl border border-[#F2D3E2]">
+                    <div className="flex items-center gap-1.5 bg-white px-3 py-1 rounded-xl border border-[#F2D3E2]">
                       <span className="font-mono font-black text-sm sm:text-base text-[#FF2D8D]">{currentOrder.id}</span>
                       <button
                         onClick={() => handleCopyId(currentOrder.id)}
@@ -175,7 +175,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
 
               {/* Delivery Partner & ETA */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div className="bg-[#FFF5F8] p-4 rounded-2xl border border-[#F2D3E2] space-y-1">
+                <div className="bg-white p-4 rounded-2xl border border-[#F2D3E2] space-y-1">
                   <span className="text-[11px] font-bold text-[#5E3F54] uppercase tracking-wider block">Estimated Delivery</span>
                   <p className="text-xs sm:text-sm font-black text-[#1E141D] flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-[#FF2D8D]" />
@@ -183,7 +183,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                   </p>
                 </div>
 
-                <div className="bg-[#FFF5F8] p-4 rounded-2xl border border-[#F2D3E2] space-y-1">
+                <div className="bg-white p-4 rounded-2xl border border-[#F2D3E2] space-y-1">
                   <span className="text-[11px] font-bold text-[#5E3F54] uppercase tracking-wider block">Courier Partner</span>
                   <div className="flex items-center justify-between">
                     <p className="text-xs sm:text-sm font-black text-[#1E141D] flex items-center gap-2">
@@ -216,9 +216,9 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                           className={`absolute -left-6 top-0.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold border transition-all ${
                             isDone 
                               ? isLatest
-                                ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] border-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/30 scale-110'
+                                ? 'bg-[#FF2D8D] border-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/30 scale-110'
                                 : 'bg-emerald-500 border-emerald-500 text-white' 
-                              : 'bg-[#FFF5F8] border-[#F2D3E2] text-[#7A5E70]'
+                              : 'bg-white border-[#F2D3E2] text-[#7A5E70]'
                           }`}
                         >
                           {isDone ? <Check className="w-3 h-3 stroke-[3]" /> : idx + 1}
@@ -260,7 +260,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                 </h3>
                 <div className="space-y-2.5">
                   {currentOrder.items.map((item, idx) => (
-                    <div key={idx} className="flex items-center gap-3 p-2.5 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2]">
+                    <div key={idx} className="flex items-center gap-3 p-2.5 rounded-2xl bg-white border border-[#F2D3E2]">
                       <img 
                         src={item.image} 
                         alt={item.name} 
@@ -313,7 +313,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                       🔒 Privacy Protected
                     </span>
                   </div>
-                  <div className="p-3.5 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] space-y-1.5 text-xs">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#F2D3E2] space-y-1.5 text-xs">
                     <p className="font-black text-sm text-[#1E141D]">{maskCustomerName(currentOrder.customerName)}</p>
                     <p className="text-[#5E3F54] flex items-center gap-2 font-medium">
                       <Phone className="w-3.5 h-3.5 text-[#7A5E70]" />
@@ -325,7 +325,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({ onNavigate
                     </p>
                   </div>
 
-                  <div className="p-3.5 rounded-2xl bg-[#FFEBF3] border border-[#F2D3E2] text-xs text-[#5E3F54] space-y-1">
+                  <div className="p-3.5 rounded-2xl bg-white border border-[#F2D3E2] text-xs text-[#5E3F54] space-y-1">
                     <div className="flex items-center gap-1.5 font-bold text-[#1E141D]">
                       <ShieldCheck className="w-4 h-4 text-[#FF2D8D]" />
                       <span>Cash On Delivery Handover</span>

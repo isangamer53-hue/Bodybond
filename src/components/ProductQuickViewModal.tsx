@@ -62,7 +62,7 @@ export const ProductQuickViewModal: React.FC = () => {
         </button>
 
         {/* Left Column: Image Gallery */}
-        <div className="md:w-1/2 p-6 bg-[#FAF7F2] flex flex-col justify-between border-b md:border-b-0 md:border-r border-[#E8E1D9]">
+        <div className="md:w-1/2 p-6 bg-white flex flex-col justify-between border-b md:border-b-0 md:border-r border-[#F2D3E2]">
           <div className="aspect-square rounded-2xl overflow-hidden bg-white border border-[#E8E1D9] shadow-xs mb-4">
             <img
               src={quickViewProduct.images[activeImageIndex] || quickViewProduct.images[0]}
@@ -179,7 +179,7 @@ export const ProductQuickViewModal: React.FC = () => {
                     className={`px-4 py-2 rounded-xl text-xs font-bold border transition-colors cursor-pointer ${
                       selectedSize === size
                         ? 'bg-[#1A1817] text-white border-[#1A1817]'
-                        : 'bg-white text-[#5A524C] border-[#DDD5CB] hover:bg-[#FAF7F2]'
+                        : 'bg-white text-[#5E3F54] border-[#F2D3E2] hover:bg-white'
                     }`}
                   >
                     {size}
@@ -192,7 +192,7 @@ export const ProductQuickViewModal: React.FC = () => {
           {/* Quantity & Add to Cart Action */}
           <div className="space-y-3 pt-3 border-t border-[#F0EAE1]">
             <div className="flex items-center gap-3">
-              <div className="flex items-center border border-[#DDD5CB] rounded-2xl bg-[#FAF7F2] p-1">
+              <div className="flex items-center border border-[#F2D3E2] rounded-2xl bg-white p-1">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-2 hover:bg-[#EAE3DA] rounded-xl text-[#5A524C] cursor-pointer"
@@ -314,7 +314,7 @@ export const ProductQuickViewModal: React.FC = () => {
               </button>
               {openSection === 'howTo' && (
                 <div className="pt-3 space-y-3 text-xs text-[#332222]">
-                  <div className="p-2.5 rounded-xl bg-pink-50 border border-pink-200">
+                  <div className="p-2.5 rounded-xl bg-white border border-[#F2D3E2]">
                     <strong className="text-[#FF2D8D] font-black block text-xs uppercase">📍 WHERE TO USE (কোথায় ব্যবহার করবেন)</strong>
                     <p className="text-[11px] text-gray-700 mt-0.5">শাড়ির ব্লাউজ, ডিপ নেক, ব্যাকলেস ড্রেস, লেহেঙ্গা ওড়না এবং অফ-শোল্ডার টপসের ফিটিং ফিক্স রাখতে।</p>
                   </div>

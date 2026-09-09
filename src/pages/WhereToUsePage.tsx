@@ -70,12 +70,12 @@ export const WhereToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="bg-transparent text-[#1E141D] min-h-screen font-sans pb-24">
+    <div className="bg-white text-[#1E141D] min-h-screen font-sans pb-24">
       
       {/* Page Header Banner */}
-      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-gradient-to-b from-white via-[#FFF5F8] to-transparent overflow-hidden text-center">
+      <section className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-[#F2D3E2] bg-white overflow-hidden text-center">
         <div className="relative z-10 max-w-4xl mx-auto space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider shadow-sm">
             <MapPin className="w-4 h-4 text-[#FF2D8D]" />
             <span>FABRIC & OUTFIT GUIDE</span>
           </div>
@@ -101,7 +101,7 @@ export const WhereToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
             >
               <div>
                 {/* Image Header */}
-                <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#FFEBF3]">
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-white">
                   <img
                     src={cat.img}
                     alt={cat.title}
@@ -110,7 +110,7 @@ export const WhereToUsePage: React.FC<PageProps> = ({ onNavigate }) => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/30" />
 
-                  <span className="absolute top-3 left-3 px-3 py-1 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white font-black text-[10px] tracking-wider uppercase rounded-full shadow-md">
+                  <span className="absolute top-3 left-3 px-3 py-1 bg-[#FF2D8D] text-white font-black text-[10px] tracking-wider uppercase rounded-full shadow-md">
                     {cat.badge}
                   </span>
 

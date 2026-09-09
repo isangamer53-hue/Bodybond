@@ -46,7 +46,7 @@ interface AdminPageProps {
 }
 
 export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
-  const { orders } = useOrders();
+  const { orders, isQuotaExceeded } = useOrders();
   const {
     videoReels,
     galleryImages,
@@ -129,7 +129,11 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
       setPasswordInput('');
       showNotification('✅ অ্যাডমিন প্যানেলে সফলভাবে লগইন হয়েছে!');
     } else {
-      setPasswordError('ভুল পাসওয়ার্ড! অনুগ্রহ করে সঠিক পাসওয়ার্ড দিন।');
+      if (isQuotaExceeded) {
+        setPasswordError('আপনার Firestore ডেটাবেজ কোটা (Quota) শেষ হয়ে গেছে। বিস্তারিত জানতে অনুগ্রহ করে নিচের লাল ব্যানারে ক্লিক করুন।');
+      } else {
+        setPasswordError('ভুল পাসওয়ার্ড! অনুগ্রহ করে সঠিক পাসওয়ার্ড দিন।');
+      }
     }
   };
 
@@ -470,14 +474,33 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
         </div>
 
         {/* Store Health Status */}
-        <div className="px-4 py-3 mx-3 my-3 bg-[#171025] rounded-2xl border border-[#2B1B42] flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs font-extrabold text-emerald-400">স্টোর সক্রিয় (Active)</span>
-          </div>
-          <span className="text-[10px] font-mono text-gray-400 bg-black/40 px-2 py-0.5 rounded">
-            v2.4
-          </span>
+        <div className="px-3 py-2 space-y-2">
+          {isQuotaExceeded ? (
+            <a 
+              href="https://console.firebase.google.com/project/dark-upgrade-fdtd0/firestore/usage"
+              target="_blank"
+              rel="noreferrer"
+              className="block px-4 py-3 mx-0 bg-rose-500/10 rounded-2xl border border-rose-500/30 group hover:bg-rose-500/20 transition-colors"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse" />
+                <span className="text-xs font-black text-rose-400">Database Blocked</span>
+              </div>
+              <p className="text-[10px] text-rose-300/80 leading-tight">
+                আপনার ফ্রি কোটা শেষ। বাজেট বাড়াতে বা কোটা দেখতে এখানে ক্লিক করুন। (Firebase Console)
+              </p>
+            </a>
+          ) : (
+            <div className="px-4 py-3 bg-[#171025] rounded-2xl border border-[#2B1B42] flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-xs font-extrabold text-emerald-400">স্টোর সক্রিয় (Active)</span>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 bg-black/40 px-2 py-0.5 rounded">
+                v2.4
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Sidebar Navigation Items */}

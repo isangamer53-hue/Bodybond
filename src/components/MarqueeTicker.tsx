@@ -27,7 +27,7 @@ export const SloganMarquee: React.FC<{
     speed === 'fast' ? 'animate-marquee-fast' : speed === 'slow' ? 'animate-marquee-slow' : 'animate-marquee';
 
   return (
-    <div className={`w-full overflow-hidden py-2.5 bg-gradient-to-r from-[#FFF0F6] via-[#FFE4EE] to-[#FFF0F6] border-y border-[#F2D3E2] shadow-sm select-none ${className}`}>
+    <div className={`w-full overflow-hidden py-2.5 bg-white border-y border-[#F2D3E2] shadow-sm select-none ${className}`}>
       <div className={`${speedClass} flex items-center space-x-6 sm:space-x-10`}>
         {[...slogans, ...slogans, ...slogans, ...slogans].map((text, idx) => (
           <div key={idx} className="flex items-center space-x-6 sm:space-x-10 whitespace-nowrap">
@@ -135,7 +135,7 @@ export const ReverseSloganMarquee: React.FC<{
   ];
 
   return (
-    <div className={`w-full overflow-hidden py-2 bg-[#FFF4F9] border-y border-[#F2D3E2] select-none ${className}`}>
+    <div className={`w-full overflow-hidden py-2 bg-white border-y border-[#F2D3E2] select-none ${className}`}>
       <div className="animate-marquee-reverse flex items-center space-x-8 sm:space-x-10">
         {[...items, ...items, ...items, ...items].map((text, idx) => (
           <div key={idx} className="flex items-center space-x-6 whitespace-nowrap">

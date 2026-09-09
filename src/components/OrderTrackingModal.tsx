@@ -44,38 +44,42 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({ onNaviga
   const [copiedId, setCopiedId] = useState(false);
 
   useEffect(() => {
-    if (isTrackingModalOpen) {
-      if (trackingOrder) {
-        // Find latest updated copy of trackingOrder from orders list
-        const updated = orders.find(o => o.id === trackingOrder.id) || trackingOrder;
-        setCurrentOrder(updated);
-        setInputQuery(updated.id);
-        setSearched(true);
-      } else if (trackingQuery) {
-        setInputQuery(trackingQuery);
-        const result = searchOrder(trackingQuery);
-        setCurrentOrder(result);
-        setSearched(true);
-      } else if (currentOrder) {
-        const updated = orders.find(o => o.id === currentOrder.id);
-        if (updated) setCurrentOrder(updated);
-      } else {
-        // Default to latest order if available or empty
-        if (orders.length > 0 && !inputQuery) {
-          setInputQuery(orders[0].id);
-          setCurrentOrder(orders[0]);
+    const fetchInitialOrder = async () => {
+      if (isTrackingModalOpen) {
+        if (trackingOrder) {
+          // Find latest updated copy of trackingOrder from orders list
+          const updated = orders.find(o => o.id === trackingOrder.id) || trackingOrder;
+          setCurrentOrder(updated);
+          setInputQuery(updated.id);
+          setSearched(true);
+        } else if (trackingQuery) {
+          setInputQuery(trackingQuery);
+          const result = await searchOrder(trackingQuery);
+          setCurrentOrder(result);
+          setSearched(true);
+        } else if (currentOrder) {
+          const updated = orders.find(o => o.id === currentOrder.id);
+          if (updated) setCurrentOrder(updated);
+        } else {
+          // Default to latest order if available or empty
+          if (orders.length > 0 && !inputQuery) {
+            setInputQuery(orders[0].id);
+            setCurrentOrder(orders[0]);
+          }
         }
       }
-    }
+    };
+
+    fetchInitialOrder();
   }, [isTrackingModalOpen, trackingOrder, trackingQuery, searchOrder, orders]);
 
   if (!isTrackingModalOpen) return null;
 
-  const handleSearch = (e?: React.FormEvent) => {
+  const handleSearch = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!inputQuery.trim()) return;
 
-    const result = searchOrder(inputQuery);
+    const result = await searchOrder(inputQuery);
     setCurrentOrder(result);
     setSearched(true);
   };

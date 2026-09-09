@@ -28,12 +28,12 @@ export const ProductGrid: React.FC = () => {
   });
 
   return (
-    <section id="products" className="py-16 sm:py-24 bg-[#FAF7F2]">
+    <section id="products" className="py-16 sm:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F3EDE6] text-xs font-bold text-[#E27D60] tracking-widest uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-xs font-bold text-[#FF2D8D] border border-[#F2D3E2] tracking-widest uppercase">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Curated Wardrobe Security</span>
           </div>
@@ -56,8 +56,8 @@ export const ProductGrid: React.FC = () => {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase whitespace-nowrap transition-all cursor-pointer ${
                   activeCategory === cat.id
-                    ? 'bg-[#1A1817] text-[#FAF7F2] shadow-sm'
-                    : 'bg-[#F3EDE6] text-[#6B635C] hover:bg-[#EAE3DA] hover:text-[#1A1817]'
+                    ? 'bg-[#FF2D8D] text-white shadow-sm'
+                    : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white hover:text-[#FF2D8D]'
                 }`}
               >
                 {cat.label}
@@ -72,7 +72,7 @@ export const ProductGrid: React.FC = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-[#F3EDE6] border border-[#DDD5CB] text-[#1A1817] text-xs rounded-xl px-3 py-1.5 font-medium focus:outline-none focus:ring-1 focus:ring-[#1A1817] cursor-pointer"
+              className="bg-white border border-[#F2D3E2] text-[#1E141D] text-xs rounded-xl px-3 py-1.5 font-medium focus:outline-none focus:border-[#FF2D8D] cursor-pointer"
             >
               <option value="featured">Featured Picks</option>
               <option value="rating">Highest Rated (4.9★+)</option>
@@ -91,7 +91,7 @@ export const ProductGrid: React.FC = () => {
         </div>
 
         {/* Value Callout Footer Banner */}
-        <div className="mt-16 rounded-3xl bg-gradient-to-r from-[#1A1817] to-[#2C2725] text-white p-8 sm:p-10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 border border-[#3E3835]">
+        <div className="mt-16 rounded-3xl bg-[#FF2D8D] text-white p-8 sm:p-10 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="space-y-2 text-center md:text-left">
             <h3 className="font-serif-luxury text-2xl sm:text-3xl">Not sure which Bodybond is for you?</h3>
             <p className="text-sm text-[#D0C4B8] max-w-xl">

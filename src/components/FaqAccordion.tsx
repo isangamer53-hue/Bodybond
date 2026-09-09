@@ -30,12 +30,12 @@ export const FaqAccordion: React.FC = () => {
   };
 
   return (
-    <section id="faqs" className="py-16 sm:py-24 bg-[#F4EFEB] border-t border-[#E8E1D9]">
+    <section id="faqs" className="py-16 sm:py-24 bg-white border-t border-[#F2D3E2]">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white border border-[#DDD5CB] text-xs font-bold text-[#E27D60] tracking-widest uppercase shadow-xs">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white border border-[#F2D3E2] text-xs font-bold text-[#FF2D8D] tracking-widest uppercase shadow-xs">
             <HelpCircle className="w-3.5 h-3.5" />
             <span>Got Questions?</span>
           </div>
@@ -69,8 +69,8 @@ export const FaqAccordion: React.FC = () => {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-4 py-2 rounded-full text-xs font-bold tracking-wider uppercase whitespace-nowrap transition-all cursor-pointer ${
                   activeCategory === cat.id
-                    ? 'bg-[#1A1817] text-white shadow-sm'
-                    : 'bg-white text-[#6B635C] border border-[#DDD5CB] hover:bg-[#FAF7F2]'
+                    ? 'bg-[#FF2D8D] text-white shadow-sm'
+                    : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white'
                 }`}
               >
                 {cat.label}
@@ -101,7 +101,7 @@ export const FaqAccordion: React.FC = () => {
                 >
                   <button
                     onClick={() => toggleAccordion(faq.id)}
-                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-[#FAF7F2]/50 transition-colors"
+                    className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-white transition-colors"
                     aria-expanded={isOpen}
                   >
                     <div className="flex items-center gap-3">
@@ -137,7 +137,7 @@ export const FaqAccordion: React.FC = () => {
           <div className="flex items-center gap-3">
             <a
               href="mailto:support@bodybond.com"
-              className="px-5 py-2.5 bg-[#FAF7F2] hover:bg-[#F3EDE6] text-[#1A1817] border border-[#DDD5CB] text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5"
+              className="px-5 py-2.5 bg-white hover:bg-white text-[#1E141D] border border-[#F2D3E2] text-xs font-bold rounded-xl transition-colors flex items-center gap-1.5"
             >
               <Mail className="w-3.5 h-3.5" />
               <span>support@bodybond.com</span>

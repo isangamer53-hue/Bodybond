@@ -22,11 +22,11 @@ interface AboutPageProps {
 
 export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   return (
-    <div className="bg-transparent min-h-screen pb-24 space-y-12 sm:space-y-20 text-[#1E141D] font-sans">
+    <div className="bg-white min-h-screen pb-24 space-y-12 sm:space-y-20 text-[#1E141D] font-sans">
       {/* Page Header Banner */}
-      <div className="bg-gradient-to-b from-white via-[#FFF5F8] to-transparent border-b border-[#F2D3E2] py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-[#F2D3E2] py-12 sm:py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>The Zero-Slip Movement • আমাদের গল্প</span>
           </div>
@@ -66,14 +66,14 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             <div className="pt-2 flex flex-wrap gap-3">
               <button
                 onClick={() => onNavigate('shop')}
-                className="px-6 sm:px-8 py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FF2D8D]/25 cursor-pointer flex items-center gap-2"
+                className="px-6 sm:px-8 py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FF2D8D]/25 cursor-pointer flex items-center gap-2"
               >
                 <span>Shop Best Sellers</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
               <button
                 onClick={() => onNavigate('how-to-use')}
-                className="px-5 sm:px-6 py-3.5 bg-white hover:bg-[#FFEBF3] text-[#1E141D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-sm"
+                className="px-5 sm:px-6 py-3.5 bg-white hover:bg-white text-[#1E141D] border border-[#F2D3E2] text-xs font-black uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-sm"
               >
                 How To Use Guide
               </button>
@@ -112,8 +112,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            <div className="p-5 sm:p-6 bg-[#FFFDFE] rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FFEBF3] flex items-center justify-center text-[#FF2D8D]">
+            <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
                 <Leaf className="w-5 h-5 text-[#FF2D8D]" />
               </div>
               <h3 className="font-black text-sm text-[#1E141D]">100% Cruelty-Free</h3>
@@ -122,8 +122,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               </p>
             </div>
 
-            <div className="p-5 sm:p-6 bg-[#FFFDFE] rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FFEBF3] flex items-center justify-center text-[#FF2D8D]">
+            <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
                 <ShieldCheck className="w-5 h-5 text-[#FF2D8D]" />
               </div>
               <h3 className="font-black text-sm text-[#1E141D]">Latex-Free & Safe</h3>
@@ -132,8 +132,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               </p>
             </div>
 
-            <div className="p-5 sm:p-6 bg-[#FFFDFE] rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FFEBF3] flex items-center justify-center text-[#FF2D8D]">
+            <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
                 <Droplets className="w-5 h-5 text-[#FF2D8D]" />
               </div>
               <h3 className="font-black text-sm text-[#1E141D]">Skin Hydration</h3>
@@ -142,8 +142,8 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
               </p>
             </div>
 
-            <div className="p-5 sm:p-6 bg-[#FFFDFE] rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
-              <div className="w-10 h-10 rounded-xl bg-[#FFEBF3] flex items-center justify-center text-[#FF2D8D]">
+            <div className="p-5 sm:p-6 bg-white rounded-2xl border border-[#F2D3E2] space-y-3 shadow-sm hover:border-[#FF2D8D]/40 transition-colors">
+              <div className="w-10 h-10 rounded-xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D]">
                 <Truck className="w-5 h-5 text-[#FF2D8D]" />
               </div>
               <h3 className="font-black text-sm text-[#1E141D]">Fast Nationwide COD</h3>
@@ -154,7 +154,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Social Media Links */}
-          <div className="mt-12 p-8 bg-gradient-to-r from-[#FFEBF3] via-white to-[#FFEBF3] rounded-3xl border border-[#F2D3E2] text-center space-y-4 shadow-md">
+          <div className="mt-12 p-8 bg-white rounded-3xl border border-[#F2D3E2] text-center space-y-4 shadow-md">
             <h3 className="text-lg font-black text-[#1E141D] uppercase tracking-wider">Connect With Us</h3>
             <p className="text-xs text-[#5E3F54] max-w-md mx-auto">
               Follow our official Facebook page and Instagram for customer looks, styling tips, and new restock alerts!

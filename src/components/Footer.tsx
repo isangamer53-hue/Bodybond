@@ -32,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenAdmin }) => {
   };
 
   return (
-    <footer className="bg-[#FCEDF3]/95 backdrop-blur-md text-[#1E141D] border-t border-[#F2D3E2]">
+    <footer className="bg-white text-[#1E141D] border-t border-[#F2D3E2]">
       {/* Main Footer Links */}
       <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">

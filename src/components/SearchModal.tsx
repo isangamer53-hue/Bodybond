@@ -53,7 +53,7 @@ export const SearchModal: React.FC = () => {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="p-4 sm:p-5 border-b border-[#E8E1D9] flex items-center gap-3 bg-[#FAF7F2]">
+        <div className="p-4 sm:p-5 border-b border-[#F2D3E2] flex items-center gap-3 bg-white">
           <Search className="w-5 h-5 text-[#8C827A]" />
           <input
             ref={inputRef}
@@ -80,13 +80,13 @@ export const SearchModal: React.FC = () => {
         </div>
 
         {/* Popular Tags */}
-        <div className="px-5 py-3 bg-[#F4EFEB] border-b border-[#E8E1D9] flex items-center gap-2 overflow-x-auto text-xs scrollbar-none">
+        <div className="px-5 py-3 bg-white border-b border-[#F2D3E2] flex items-center gap-2 overflow-x-auto text-xs scrollbar-none">
           <span className="font-bold text-[#7A7169] whitespace-nowrap">Trending:</span>
           {popularSearches.map((term) => (
             <button
               key={term}
               onClick={() => setQuery(term)}
-              className="px-3 py-1 bg-white hover:bg-[#FAF7F2] rounded-full border border-[#DDD5CB] text-[#3E3A37] whitespace-nowrap font-medium transition-colors cursor-pointer"
+              className="px-3 py-1 bg-white hover:bg-white rounded-full border border-[#F2D3E2] text-[#3E3A37] whitespace-nowrap font-medium transition-colors cursor-pointer"
             >
               {term}
             </button>
@@ -109,18 +109,18 @@ export const SearchModal: React.FC = () => {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                   setIsSearchOpen(false);
                 }}
-                className="py-3 flex items-center justify-between gap-4 hover:bg-[#FAF7F2] p-2 rounded-2xl transition-colors cursor-pointer group"
+                className="py-3 flex items-center justify-between gap-4 hover:bg-white p-2 rounded-2xl transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={prod.images[0]}
                     alt={prod.name}
                     referrerPolicy="no-referrer"
-                    className="w-14 h-14 rounded-xl object-cover border border-[#E8E1D9] bg-[#FAF7F2] flex-shrink-0"
+                    className="w-14 h-14 rounded-xl object-cover border border-[#F2D3E2] bg-white flex-shrink-0"
                   />
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <h4 className="font-bold text-xs sm:text-sm text-[#1A1817] group-hover:text-[#E27D60] transition-colors truncate">
+                      <h4 className="font-bold text-xs sm:text-sm text-[#1A1817] group-hover:text-[#FF2D8D] transition-colors truncate">
                         {prod.name}
                       </h4>
                       {prod.badge && (
@@ -131,7 +131,7 @@ export const SearchModal: React.FC = () => {
                     </div>
                     <p className="text-xs text-[#7A7169] line-clamp-1">{prod.shortDescription}</p>
                     <div className="flex items-center gap-1.5 text-[11px] text-[#8C827A] mt-0.5">
-                      <Star className="w-3 h-3 fill-[#E27D60] text-[#E27D60]" />
+                      <Star className="w-3 h-3 fill-[#FF2D8D] text-[#FF2D8D]" />
                       <span>{prod.rating} ({prod.reviewCount})</span>
                     </div>
                   </div>

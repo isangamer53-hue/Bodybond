@@ -27,7 +27,7 @@ export const OutfitMatcher: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] border border-[#F2D3E2] text-xs font-black text-[#FF2D8D] tracking-widest uppercase shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white border border-[#F2D3E2] text-xs font-black text-[#FF2D8D] tracking-widest uppercase shadow-sm">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Interactive Styling Guide • স্টাইলিং নির্দেশিকা</span>
           </div>
@@ -47,8 +47,8 @@ export const OutfitMatcher: React.FC = () => {
               onClick={() => setSelectedOutfitId(outfit.id)}
               className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-full text-xs font-black tracking-wider uppercase transition-all whitespace-nowrap cursor-pointer min-h-[44px] flex items-center ${
                 selectedOutfitId === outfit.id
-                  ? 'bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] text-white shadow-md shadow-[#FF2D8D]/25 border border-transparent'
-                  : 'bg-white text-[#5E3F54] hover:text-[#1E141D] hover:bg-[#FFEBF3] border border-[#F2D3E2]'
+                  ? 'bg-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25 border border-transparent'
+                  : 'bg-white text-[#5E3F54] hover:text-[#1E141D] hover:bg-white border border-[#F2D3E2]'
               }`}
             >
               {outfit.name}
@@ -61,7 +61,7 @@ export const OutfitMatcher: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
             
             {/* Left Image visual */}
-            <div className="lg:col-span-5 relative aspect-[4/5] rounded-2xl overflow-hidden bg-[#FFEBF3] border border-[#F2D3E2]">
+            <div className="lg:col-span-5 relative aspect-[4/5] rounded-2xl overflow-hidden bg-white border border-[#F2D3E2]">
               <img
                 src={activeOutfit.image}
                 alt={activeOutfit.name}
@@ -70,7 +70,7 @@ export const OutfitMatcher: React.FC = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">
-                <span className="text-[10px] uppercase font-black tracking-widest px-2.5 py-1 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white rounded-full">
+                <span className="text-[10px] uppercase font-black tracking-widest px-2.5 py-1 bg-[#FF2D8D] text-white rounded-full">
                   Outfit Focus
                 </span>
                 <h4 className="text-xl font-black mt-1 text-white">{activeOutfit.name}</h4>
@@ -93,7 +93,7 @@ export const OutfitMatcher: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] space-y-1.5">
+              <div className="p-4 rounded-2xl bg-white border border-[#F2D3E2] space-y-1.5">
                 <div className="flex items-center gap-2 text-xs font-black text-[#FF2D8D] uppercase tracking-wider">
                   <Lightbulb className="w-4 h-4 text-amber-500" />
                   <span>Stylist Application Tip:</span>
@@ -104,7 +104,7 @@ export const OutfitMatcher: React.FC = () => {
               </div>
 
               {/* Recommended Product Box */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#F2D3E2] flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <img
                     src={recommendedProduct.images[0]}
@@ -126,7 +126,7 @@ export const OutfitMatcher: React.FC = () => {
                   className={`w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs font-black tracking-wider uppercase transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer min-h-[44px] ${
                     added
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white shadow-[#FF2D8D]/25'
+                      : 'bg-[#FF2D8D] hover:bg-[#E61B78] text-white shadow-[#FF2D8D]/25'
                   }`}
                 >
                   {added ? (

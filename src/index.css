@@ -7,15 +7,8 @@
 
   body {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    background-color: #FFF5F8;
-    background-image: 
-      radial-gradient(ellipse 90% 50% at 50% -5%, rgba(255, 105, 180, 0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 70% 50% at 100% 30%, rgba(255, 182, 193, 0.25) 0%, transparent 55%),
-      radial-gradient(ellipse 65% 55% at 0% 60%, rgba(255, 215, 225, 0.35) 0%, transparent 60%),
-      radial-gradient(ellipse 85% 45% at 50% 100%, rgba(255, 192, 203, 0.20) 0%, transparent 65%);
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-color: #FFFFFF;
+    background-image: none;
     color: #1E141D;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -141,7 +134,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFF0F5;
+  background: #FFFFFF;
 }
 
 ::-webkit-scrollbar-thumb {

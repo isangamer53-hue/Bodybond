@@ -182,7 +182,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
   // SUCCESS CONFIRMATION VIEW
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-transparent py-8 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8 font-sans">
         <div className="max-w-xl mx-auto bg-white rounded-3xl border border-[#F2D3E2] p-6 sm:p-8 shadow-xl text-center space-y-6">
           
           <div className="w-20 h-20 rounded-full bg-emerald-100 border-2 border-emerald-500 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
@@ -190,7 +190,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
           </div>
 
           <div className="space-y-2">
-            <span className="inline-block px-3 py-1 rounded-full bg-[#FFEBF3] text-[#FF2D8D] text-xs font-black uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 rounded-full bg-white border border-[#F2D3E2] text-[#FF2D8D] text-xs font-black uppercase tracking-wider">
               🎉 Order Successfully Placed!
             </span>
             <h1 className="text-2xl sm:text-3xl font-black text-[#1E141D] uppercase tracking-tight">
@@ -202,7 +202,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Order Info Card */}
-          <div className="p-4 bg-[#FFF5F8] rounded-2xl border border-[#F2D3E2] text-left space-y-3 text-xs">
+          <div className="p-4 bg-white rounded-2xl border border-[#F2D3E2] text-left space-y-3 text-xs">
             <div className="flex items-center justify-between border-b border-[#F2D3E2] pb-2.5">
               <span className="font-bold text-[#7A5E70]">Order ID:</span>
               <div className="flex items-center gap-1.5">
@@ -249,14 +249,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
           <div className="space-y-3 pt-2">
             <button
               onClick={() => openTrackingModal()}
-              className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] text-white font-black text-xs uppercase tracking-wider shadow-lg hover:opacity-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-3.5 px-6 rounded-2xl bg-[#FF2D8D] hover:bg-[#E61B78] text-white font-black text-xs uppercase tracking-wider shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Truck className="w-4 h-4" />
               <span>Track Order Live (লাইভ ট্র্যাক করুন)</span>
             </button>
 
             <a
-              href="https://wa.me/8801700000000?text=Hello%20Bodybond,%20I%20just%20placed%20order%20"
+              href={`https://wa.me/${announcement?.whatsappNumber?.replace(/[^0-9]/g, '') || '8801305273979'}?text=${encodeURIComponent(`Hello Bodybond, I just placed order ${orderNumber || ''}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full py-3 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
@@ -267,7 +267,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
 
             <button
               onClick={() => onNavigate('shop')}
-              className="w-full py-3 px-6 rounded-2xl bg-white border border-[#F2D3E2] hover:bg-[#FFEBF3] text-[#1E141D] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5"
+              className="w-full py-3 px-6 rounded-2xl bg-white border border-[#F2D3E2] hover:bg-white text-[#1E141D] font-bold text-xs uppercase tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1.5"
             >
               <span>Continue Shopping (আরও কেনাকাটা করুন)</span>
               <ChevronRight className="w-4 h-4 text-[#FF2D8D]" />
@@ -339,7 +339,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="যেমন: নুসরাত জাহান"
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -355,7 +355,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="যেমন: 01712345678"
-                  className="w-full px-4 py-3.5 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3.5 rounded-2xl bg-white border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -372,8 +372,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                     onClick={() => setDeliveryArea('dhaka')}
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                       deliveryArea === 'dhaka'
-                        ? 'border-[#FF2D8D] bg-[#FFEBF3] ring-2 ring-[#FF2D8D]/30'
-                        : 'border-[#F2D3E2] bg-white hover:bg-[#FFF5F8]'
+                        ? 'border-[#FF2D8D] bg-white ring-2 ring-[#FF2D8D]/30'
+                        : 'border-[#F2D3E2] bg-white hover:bg-white'
                     }`}
                   >
                     <div>
@@ -388,8 +388,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                     onClick={() => setDeliveryArea('outside')}
                     className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between ${
                       deliveryArea === 'outside'
-                        ? 'border-[#FF2D8D] bg-[#FFEBF3] ring-2 ring-[#FF2D8D]/30'
-                        : 'border-[#F2D3E2] bg-white hover:bg-[#FFF5F8]'
+                        ? 'border-[#FF2D8D] bg-white ring-2 ring-[#FF2D8D]/30'
+                        : 'border-[#F2D3E2] bg-white hover:bg-white'
                     }`}
                   >
                     <div>
@@ -413,7 +413,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   placeholder="যেমন: বাসা #৪৫, রোড #১২, ধানমন্ডি, ঢাকা"
-                  className="w-full px-4 py-3 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#F2D3E2] text-sm text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all resize-none"
                 />
               </div>
 
@@ -428,7 +428,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                   value={orderNotes}
                   onChange={(e) => setOrderNotes(e.target.value)}
                   placeholder="যেমন: ডেলিভারির আগে কল করবেন"
-                  className="w-full px-4 py-3 rounded-2xl bg-[#FFF5F8] border border-[#F2D3E2] text-xs text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 rounded-2xl bg-white border border-[#F2D3E2] text-xs text-[#1E141D] placeholder:text-[#A38698] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF2D8D] focus:border-transparent transition-all"
                 />
               </div>
 
@@ -452,7 +452,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 className={`w-full py-4 px-6 rounded-2xl text-base font-black tracking-wider uppercase transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
                   isSubmitting || cart.length === 0
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
-                    : 'bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white shadow-[#FF2D8D]/30 active:scale-[0.99]'
+                    : 'bg-[#FF2D8D] hover:bg-[#E61B78] text-white shadow-[#FF2D8D]/30 active:scale-[0.99]'
                 }`}
               >
                 {isSubmitting ? (
@@ -503,14 +503,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                 <ShoppingBag className="w-5 h-5 text-[#FF2D8D]" />
                 <span>অর্ডার সামারি (Order Items)</span>
               </h2>
-              <span className="text-xs font-bold text-[#FF2D8D] bg-[#FFEBF3] px-2.5 py-0.5 rounded-full">
+              <span className="text-xs font-bold text-[#FF2D8D] bg-white border border-[#F2D3E2] px-2.5 py-0.5 rounded-full">
                 {cart.reduce((a, b) => a + b.quantity, 0)} Items
               </span>
             </div>
 
             {/* Cart Items List */}
             {cart.length === 0 ? (
-              <div className="py-8 text-center space-y-4 bg-[#FFF5F8] rounded-2xl p-4 border border-dashed border-[#F2D3E2]">
+              <div className="py-8 text-center space-y-4 bg-white rounded-2xl p-4 border border-dashed border-[#F2D3E2]">
                 <ShoppingBag className="w-10 h-10 text-[#FF2D8D] mx-auto opacity-50" />
                 <div className="space-y-1">
                   <span className="font-extrabold text-sm text-[#1E141D] block">আপনার ব্যাগ ফাঁকা আছে!</span>
@@ -537,7 +537,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
             ) : (
               <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
                 {cart.map((item) => (
-                  <div key={item.id} className="p-3 bg-[#FFF5F8] rounded-2xl border border-[#F2D3E2] flex items-center gap-3">
+                  <div key={item.id} className="p-3 bg-white rounded-2xl border border-[#F2D3E2] flex items-center gap-3">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -595,7 +595,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ onNavigate }) => {
                     value={couponInput}
                     onChange={(e) => setCouponInput(e.target.value)}
                     placeholder="কুপন কোড (WELCOME10 / BODY10)"
-                    className="w-full pl-8 pr-3 py-2.5 bg-[#FFF5F8] border border-[#F2D3E2] rounded-xl text-xs uppercase font-bold text-[#1E141D] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#FF2D8D]"
+                    className="w-full pl-8 pr-3 py-2.5 bg-white border border-[#F2D3E2] rounded-xl text-xs uppercase font-bold text-[#1E141D] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#FF2D8D]"
                   />
                 </div>
                 <button

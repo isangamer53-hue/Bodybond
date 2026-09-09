@@ -4,7 +4,13 @@ import {
   onSnapshot, 
   doc, 
   setDoc, 
-  deleteDoc 
+  deleteDoc,
+  query,
+  orderBy,
+  limit,
+  getDoc,
+  where,
+  getDocs
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { 
@@ -28,13 +34,12 @@ enum OperationType {
   WRITE = 'write',
 }
 
-function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
-  const errInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    operationType,
-    path
-  };
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
+function handleFirestoreError(error: unknown, _operationType: OperationType, _path: string | null, setQuotaExceeded?: (val: boolean) => void) {
+  const message = error instanceof Error ? error.message : String(error);
+  if (message.includes('Quota limit exceeded') || message.includes('quota')) {
+    if (setQuotaExceeded) setQuotaExceeded(true);
+  }
+  console.error('Firestore Error: ', message);
 }
 
 export function sanitizeFirestoreObject<T>(data: T): T {
@@ -83,7 +88,7 @@ interface OrderContextType {
   trackingQuery: string;
   openTrackingModal: (orderIdOrPhone?: string) => void;
   closeTrackingModal: () => void;
-  searchOrder: (query: string) => CustomerOrder | null;
+  searchOrder: (query: string) => Promise<CustomerOrder | null>;
   createOrder: (params: CreateOrderParams) => CustomerOrder;
   updateOrderStatus: (
     orderId: string, 
@@ -102,6 +107,7 @@ interface OrderContextType {
   updateAnnouncement: (config: Partial<AnnouncementConfig>) => void;
   recentBuyerActivities: LiveBuyerActivity[];
   lastCreatedOrder: CustomerOrder | null;
+  isQuotaExceeded: boolean;
 }
 
 const OrderContext = createContext<OrderContextType | undefined>(undefined);
@@ -153,31 +159,29 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return INITIAL_ANNOUNCEMENT;
   });
 
-  // 4. Order tracking modal state
   const [isTrackingModalOpen, setIsTrackingModalOpen] = useState<boolean>(false);
   const [trackingOrder, setTrackingOrder] = useState<CustomerOrder | null>(null);
   const [trackingQuery, setTrackingQuery] = useState<string>('');
   const [lastCreatedOrder, setLastCreatedOrder] = useState<CustomerOrder | null>(null);
+  const [isQuotaExceeded, setIsQuotaExceeded] = useState<boolean>(false);
 
-  // Persist Orders & Firestore Real-Time Listener
-  useEffect(() => {
-    try {
-      localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(orders));
-    } catch (e) {
-      console.error('Error saving orders:', e);
-    }
-  }, [orders]);
-
+  // Persist Orders & Firestore Real-Time Listener (Optimized: Last 100 orders only)
   useEffect(() => {
     const path = 'orders';
+    const q = query(
+      collection(db, path), 
+      orderBy('createdAt', 'desc'), 
+      limit(100)
+    );
+
     const unsubscribe = onSnapshot(
-      collection(db, path),
+      q,
       (snapshot) => {
         const firestoreOrders: CustomerOrder[] = [];
         snapshot.forEach((docSnap) => {
           firestoreOrders.push(docSnap.data() as CustomerOrder);
         });
-        firestoreOrders.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        // Snapshot is already ordered by query, but we ensure it's correct
         setOrders(firestoreOrders);
         try {
           localStorage.setItem(ORDERS_STORAGE_KEY, JSON.stringify(firestoreOrders));
@@ -186,7 +190,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
       },
       (error) => {
-        handleFirestoreError(error, OperationType.GET, path);
+        handleFirestoreError(error, OperationType.GET, path, setIsQuotaExceeded);
       }
     );
 
@@ -219,67 +223,73 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           const remoteData = snap.data() as Partial<AnnouncementConfig>;
           setAnnouncement((prev) => {
             const merged = { ...prev, ...remoteData };
-            // If remote doesn't have offerTargetTimestamp or it's expired, generate one and save to DB
+            
+            // Note: We avoid writing back to Firestore here to prevent infinite read/write loops
+            // if multiple clients hit the quota simultaneously.
+            // If expired, the UI will handle it or an admin will reset it.
             if (!merged.offerTargetTimestamp || merged.offerTargetTimestamp < Date.now()) {
               const hrs = merged.offerCountdownHours ?? 11;
               const mins = merged.offerCountdownMinutes ?? 51;
-              const secs = merged.offerCountdownSeconds ?? 11;
-              const durationMs = (hrs * 3600 + mins * 60 + secs) * 1000;
+              const durationMs = (hrs * 3600 + mins * 60) * 1000;
               merged.offerTargetTimestamp = Date.now() + durationMs;
-
-              const sanitized = sanitizeFirestoreObject({ offerTargetTimestamp: merged.offerTargetTimestamp });
-              setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
-                handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');
-              });
             }
             return merged;
-          });
-        } else {
-          // Document doesn't exist yet in Firestore, create default with offerTargetTimestamp
-          const hrs = INITIAL_ANNOUNCEMENT.offerCountdownHours ?? 11;
-          const mins = INITIAL_ANNOUNCEMENT.offerCountdownMinutes ?? 51;
-          const secs = INITIAL_ANNOUNCEMENT.offerCountdownSeconds ?? 11;
-          const durationMs = (hrs * 3600 + mins * 60 + secs) * 1000;
-          const defaultData = {
-            ...INITIAL_ANNOUNCEMENT,
-            offerTargetTimestamp: Date.now() + durationMs,
-          };
-          const sanitized = sanitizeFirestoreObject(defaultData);
-          setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
-            handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');
           });
         }
       },
       (err) => {
-        handleFirestoreError(err, OperationType.GET, 'settings/announcement');
+        handleFirestoreError(err, OperationType.GET, 'settings/announcement', setIsQuotaExceeded);
       }
     );
     return () => unsub();
   }, []);
 
-  // Search order by orderId or customer phone (No login required)
-  const searchOrder = useCallback((query: string): CustomerOrder | null => {
-    if (!query || !query.trim()) return null;
-    const cleanQuery = query.trim().toLowerCase().replace(/[\s\-_]/g, '');
+  // Search order by orderId or customer phone (Optimized for Firestore Quota)
+  const searchOrder = useCallback(async (queryStr: string): Promise<CustomerOrder | null> => {
+    if (!queryStr || !queryStr.trim()) return null;
+    const cleanQuery = queryStr.trim().toLowerCase().replace(/[\s\-_]/g, '');
 
-    const match = orders.find(order => {
+    // 1. First check local state (which has latest 100 orders)
+    const localMatch = orders.find(order => {
       const cleanId = order.id.toLowerCase().replace(/[\s\-_]/g, '');
       const cleanPhone = order.customerPhone.replace(/[\s\-_+]/g, '');
       
       return cleanId === cleanQuery || 
              cleanId.includes(cleanQuery) || 
              cleanPhone === cleanQuery || 
-             cleanPhone.endsWith(cleanQuery) ||
-             (cleanQuery.length >= 4 && cleanPhone.includes(cleanQuery));
+             cleanPhone.endsWith(cleanQuery);
     });
 
-    return match || null;
+    if (localMatch) return localMatch;
+
+    // 2. If not in local 100, try fetching by exact ID from Firestore
+    try {
+      // BD-XXXXXX IDs are usually what people search for
+      const exactDoc = await getDoc(doc(db, 'orders', queryStr.trim().toUpperCase()));
+      if (exactDoc.exists()) {
+        return exactDoc.data() as CustomerOrder;
+      }
+
+      // 3. Try searching by phone number in Firestore if it looks like a phone
+      const phoneQuery = queryStr.trim().replace(/[\s\-_+]/g, '');
+      if (phoneQuery.length >= 10) {
+        const q = query(collection(db, 'orders'), where('customerPhone', '==', phoneQuery), limit(1));
+        const phoneSnap = await getDocs(q);
+        if (!phoneSnap.empty) {
+          return phoneSnap.docs[0].data() as CustomerOrder;
+        }
+      }
+    } catch (err) {
+      handleFirestoreError(err, OperationType.GET, 'orders/search', setIsQuotaExceeded);
+    }
+
+    return null;
   }, [orders]);
 
-  const openTrackingModal = useCallback((orderIdOrPhone?: string) => {
+  const openTrackingModal = useCallback(async (orderIdOrPhone?: string) => {
     if (orderIdOrPhone) {
       setTrackingQuery(orderIdOrPhone);
-      const found = searchOrder(orderIdOrPhone);
+      const found = await searchOrder(orderIdOrPhone);
       setTrackingOrder(found);
     } else {
       setTrackingOrder(null);
@@ -377,7 +387,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Save to Firebase Firestore safely sanitized
     const payload = sanitizeFirestoreObject(newOrder);
     setDoc(doc(db, 'orders', newOrder.id), payload).catch((err) => {
-      handleFirestoreError(err, OperationType.WRITE, `orders/${newOrder.id}`);
+      handleFirestoreError(err, OperationType.WRITE, `orders/${newOrder.id}`, setIsQuotaExceeded);
     });
 
     return newOrder;
@@ -431,7 +441,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Sync to Firebase Firestore safely sanitized
         const payload = sanitizeFirestoreObject(updatedOrder);
         setDoc(doc(db, 'orders', orderId), payload, { merge: true }).catch((err) => {
-          handleFirestoreError(err, OperationType.WRITE, `orders/${orderId}`);
+          handleFirestoreError(err, OperationType.WRITE, `orders/${orderId}`, setIsQuotaExceeded);
         });
 
         return updatedOrder;
@@ -443,7 +453,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const deleteOrder = useCallback((orderId: string) => {
     setOrders(prev => prev.filter(o => o.id !== orderId));
     deleteDoc(doc(db, 'orders', orderId)).catch((err) => {
-      handleFirestoreError(err, OperationType.DELETE, `orders/${orderId}`);
+      handleFirestoreError(err, OperationType.DELETE, `orders/${orderId}`, setIsQuotaExceeded);
     });
   }, []);
 
@@ -514,7 +524,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
       const sanitized = sanitizeFirestoreObject(updated);
       setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
-        handleFirestoreError(err, OperationType.WRITE, 'settings/announcement');
+        handleFirestoreError(err, OperationType.WRITE, 'settings/announcement', setIsQuotaExceeded);
       });
       return updated;
     });
@@ -571,9 +581,33 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updateAnnouncement,
         recentBuyerActivities,
         lastCreatedOrder,
+        isQuotaExceeded,
       }}
     >
       {children}
+      {isQuotaExceeded && (
+        <div className="fixed bottom-4 left-4 right-4 z-[9999] animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="bg-[#1C1C1C] border border-[#FF2D8D]/30 p-4 rounded-2xl shadow-2xl flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#FF2D8D]/10 flex items-center justify-center flex-shrink-0">
+                <span className="text-[#FF2D8D] text-lg font-bold">!</span>
+              </div>
+              <div>
+                <h4 className="text-white text-sm font-bold">Limited Database Access</h4>
+                <p className="text-gray-400 text-[11px] leading-tight">
+                  High traffic has temporarily paused real-time updates. App will auto-refresh when access is restored.
+                </p>
+              </div>
+            </div>
+            <button 
+              onClick={() => window.location.reload()}
+              className="px-4 py-2 bg-[#FF2D8D] text-white text-xs font-bold rounded-xl hover:bg-[#E02078] transition-colors flex-shrink-0"
+            >
+              Check Now
+            </button>
+          </div>
+        </div>
+      )}
     </OrderContext.Provider>
   );
 };

@@ -48,7 +48,7 @@ export const TikTokReels: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 sm:py-24 bg-[#FAF7F2] border-t border-[#E8E1D9]">
+    <section className="py-16 sm:py-24 bg-white border-t border-[#E8E1D9]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}

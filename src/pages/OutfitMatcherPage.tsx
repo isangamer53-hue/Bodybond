@@ -8,11 +8,11 @@ interface OutfitMatcherPageProps {
 
 export const OutfitMatcherPage: React.FC<OutfitMatcherPageProps> = ({ onNavigate }) => {
   return (
-    <div className="bg-transparent min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D]">
+    <div className="bg-white min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D]">
       {/* Page Header */}
-      <div className="bg-gradient-to-b from-white via-[#FFF5F8] to-transparent border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 text-center">
+      <div className="bg-white border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-4xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>Interactive Wardrobe Guide • আউটফিট সমাধান</span>
           </div>
@@ -31,7 +31,7 @@ export const OutfitMatcherPage: React.FC<OutfitMatcherPageProps> = ({ onNavigate
 
       {/* Bottom CTA Banner */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-gradient-to-r from-[#FF2D8D] via-[#FF65AC] to-[#FFA6D5] border border-[#F2D3E2] text-white rounded-3xl p-6 sm:p-12 text-center space-y-5 shadow-xl">
+        <div className="bg-[#FF2D8D] border border-[#F2D3E2] text-white rounded-3xl p-6 sm:p-12 text-center space-y-5 shadow-xl">
           <span className="text-[10px] sm:text-xs font-black tracking-widest text-white/95 uppercase block">
             100% Cash On Delivery Available Nationwide
           </span>

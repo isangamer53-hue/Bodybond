@@ -84,9 +84,9 @@ export const ShopPage: React.FC<ShopPageProps> = ({
   }, [selectedCategory, sortBy, searchQuery, selectedProblemFilter]);
 
   return (
-    <div className="bg-transparent text-[#1E141D] min-h-screen pb-20 font-sans">
+    <div className="bg-white text-[#1E141D] min-h-screen pb-20 font-sans">
       {/* Shop Header Banner */}
-      <div className="bg-gradient-to-b from-[#FFEAF2] via-[#FFF5F8] to-[#FFF5F8] border-b border-[#F2D3E2] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
+      <div className="bg-white border-b border-[#F2D3E2] py-10 sm:py-14 px-4 sm:px-6 lg:px-8 text-center sm:text-left">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
@@ -119,13 +119,13 @@ export const ShopPage: React.FC<ShopPageProps> = ({
                 onClick={() => setSelectedCategory(cat.id as ProductCategory | 'all')}
                 className={`px-4 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase whitespace-nowrap transition-all cursor-pointer flex items-center gap-2 ${
                   selectedCategory === cat.id
-                    ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md font-black shadow-[#FF2D8D]/25'
-                    : 'bg-white text-[#4A2E42] hover:bg-[#FFEBF3] border border-[#F2D3E2]'
+                    ? 'bg-[#FF2D8D] text-white shadow-md font-black shadow-[#FF2D8D]/25'
+                    : 'bg-white text-[#4A2E42] hover:bg-white border border-[#F2D3E2]'
                 }`}
               >
                 <span>{cat.label}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                  selectedCategory === cat.id ? 'bg-black/20 text-white font-extrabold' : 'bg-[#FFEBF3] text-[#FF2D8D]'
+                  selectedCategory === cat.id ? 'bg-black/20 text-white font-extrabold' : 'bg-white text-[#FF2D8D]'
                 }`}>
                   {cat.count}
                 </span>
@@ -168,8 +168,8 @@ export const ShopPage: React.FC<ShopPageProps> = ({
                   onClick={() => setSelectedProblemFilter(selectedProblemFilter === tag.id ? null : tag.id)}
                   className={`px-3 py-1.5 rounded-lg text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer ${
                     (selectedProblemFilter === tag.id) || (tag.id === 'all' && !selectedProblemFilter)
-                      ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white font-extrabold'
-                      : 'bg-white hover:bg-[#FFEBF3] text-[#4A2E42] border border-[#F2D3E2]'
+                      ? 'bg-[#FF2D8D] text-white font-extrabold'
+                      : 'bg-white hover:bg-white text-[#4A2E42] border border-[#F2D3E2]'
                   }`}
                 >
                   {tag.label}
@@ -222,7 +222,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
           </div>
         ) : (
           <div className="bg-white rounded-3xl p-12 text-center border border-[#F2D3E2] space-y-4 my-8 shadow-sm">
-            <div className="w-16 h-16 rounded-full bg-[#FFEBF3] mx-auto flex items-center justify-center text-[#FF2D8D]">
+            <div className="w-16 h-16 rounded-full bg-white border border-[#F2D3E2] mx-auto flex items-center justify-center text-[#FF2D8D]">
               <Search className="w-8 h-8 text-[#FF2D8D]" />
             </div>
             <h3 className="text-2xl font-black text-[#1E141D] uppercase tracking-tight">
@@ -237,7 +237,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
                 setSearchQuery('');
                 setSelectedProblemFilter(null);
               }}
-              className="px-6 py-2.5 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-xs font-extrabold uppercase tracking-wider rounded-full transition-colors cursor-pointer shadow-md"
+              className="px-6 py-2.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-extrabold uppercase tracking-wider rounded-full transition-colors cursor-pointer shadow-md"
             >
               Reset Filters
             </button>
@@ -247,7 +247,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
         {/* Confidence Guarantees Banner */}
         <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 pt-10 border-t border-[#F2D3E2]">
           <div className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-[#F2D3E2] shadow-sm">
-            <div className="p-3 bg-[#FFEBF3] rounded-xl text-[#FF2D8D] flex-shrink-0">
+            <div className="p-3 bg-white border border-[#F2D3E2] rounded-xl text-[#FF2D8D] flex-shrink-0">
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div className="space-y-1">
@@ -259,7 +259,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
           </div>
 
           <div className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-[#F2D3E2] shadow-sm">
-            <div className="p-3 bg-[#FFEBF3] rounded-xl text-[#FF2D8D] flex-shrink-0">
+            <div className="p-3 bg-white border border-[#F2D3E2] rounded-xl text-[#FF2D8D] flex-shrink-0">
               <Truck className="w-6 h-6" />
             </div>
             <div className="space-y-1">
@@ -271,7 +271,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
           </div>
 
           <div className="flex items-start gap-4 p-5 bg-white rounded-2xl border border-[#F2D3E2] shadow-sm">
-            <div className="p-3 bg-[#FFEBF3] rounded-xl text-[#FF2D8D] flex-shrink-0">
+            <div className="p-3 bg-white border border-[#F2D3E2] rounded-xl text-[#FF2D8D] flex-shrink-0">
               <RotateCcw className="w-6 h-6" />
             </div>
             <div className="space-y-1">

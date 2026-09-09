@@ -35,7 +35,7 @@ export const IngredientsSpotlight: React.FC = () => {
         
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-xs font-black text-[#FF2D8D] border border-[#F2D3E2] tracking-widest uppercase shadow-sm">
+          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-xs font-black text-[#FF2D8D] border border-[#F2D3E2] tracking-widest uppercase shadow-sm">
             <Leaf className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>Clean Skincare Science • ১০০% স্কিন ফ্রেন্ডলি উপাদান</span>
           </div>
@@ -56,7 +56,7 @@ export const IngredientsSpotlight: React.FC = () => {
                 key={i}
                 className="bg-white rounded-3xl p-6 border border-[#F2D3E2] shadow-md hover:border-[#FF2D8D] transition-all duration-300 flex flex-col justify-between"
               >
-                <div className="w-12 h-12 rounded-2xl bg-[#FFEBF3] border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D] mb-4 shadow-sm">
+                <div className="w-12 h-12 rounded-2xl bg-white border border-[#F2D3E2] flex items-center justify-center text-[#FF2D8D] mb-4 shadow-sm">
                   <Icon className="w-6 h-6" />
                 </div>
                 <div className="space-y-1.5">

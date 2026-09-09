@@ -152,11 +152,11 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div className="bg-transparent min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D] font-sans">
+    <div className="bg-white min-h-screen pb-24 space-y-12 sm:space-y-16 text-[#1E141D] font-sans">
       {/* Page Header */}
-      <div className="bg-gradient-to-b from-white via-[#FFF5F8] to-transparent border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="bg-white border-b border-[#F2D3E2] py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FFEBF3] text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white text-[#FF2D8D] border border-[#F2D3E2] text-xs font-black tracking-wider uppercase shadow-sm">
             <HelpCircle className="w-3.5 h-3.5 text-[#FF2D8D]" />
             <span>Help Center & FAQ • সাহায্য কেন্দ্র</span>
           </div>
@@ -186,7 +186,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A5E70] hover:text-[#1E141D] px-2 py-1 bg-[#FFEBF3] rounded-lg cursor-pointer"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[#7A5E70] hover:text-[#1E141D] px-2 py-1 bg-white border border-[#F2D3E2] rounded-lg cursor-pointer"
               >
                 Clear
               </button>
@@ -202,7 +202,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
                 className={`px-4 py-2.5 rounded-full text-xs font-bold whitespace-nowrap transition-all cursor-pointer flex items-center gap-1.5 min-h-[40px] ${
                   selectedCategory === cat.id
                     ? 'bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white shadow-md shadow-[#FF2D8D]/25 border border-[#FF2D8D]'
-                    : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-[#FFEBF3] hover:text-[#1E141D] shadow-sm'
+                    : 'bg-white text-[#5E3F54] border border-[#F2D3E2] hover:bg-white hover:text-[#1E141D] shadow-sm'
                 }`}
               >
                 <span>{cat.label}</span>
@@ -276,7 +276,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
                     <div className="px-4 sm:px-5 pb-5 text-xs sm:text-sm text-[#5E3F54] leading-relaxed border-t border-[#F2D3E2] pt-3.5 space-y-2 animate-in fade-in duration-200">
                       <p>{faq.answer}</p>
                       {faq.answerBn && (
-                        <p className="p-2.5 bg-[#FFF5F8] rounded-xl text-[11px] sm:text-xs text-[#992257] border border-[#F2D3E2]">
+                        <p className="p-2.5 bg-white rounded-xl text-[11px] sm:text-xs text-[#992257] border border-[#F2D3E2]">
                           💡 <strong className="text-[#1E141D]">বাংলায়:</strong> {faq.answerBn}
                         </p>
                       )}
@@ -334,7 +334,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
                     placeholder="e.g. Farzana Islam"
                     value={contactName}
                     onChange={(e) => setContactName(e.target.value)}
-                    className="w-full px-3.5 py-3 bg-[#FFFDFE] border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
+                    className="w-full px-3.5 py-3 bg-white border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
                   />
                 </div>
                 <div className="space-y-1">
@@ -345,7 +345,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
                     placeholder="e.g. 01700000000"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
-                    className="w-full px-3.5 py-3 bg-[#FFFDFE] border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
+                    className="w-full px-3.5 py-3 bg-white border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
                   />
                 </div>
               </div>
@@ -358,14 +358,14 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
                   placeholder="Describe your dress, event date, or order inquiry..."
                   value={contactMessage}
                   onChange={(e) => setContactMessage(e.target.value)}
-                  className="w-full px-3.5 py-3 bg-[#FFFDFE] border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
+                  className="w-full px-3.5 py-3 bg-white border border-[#F2D3E2] rounded-xl text-xs text-[#1E141D] placeholder:text-[#9E8294] focus:outline-none focus:border-[#FF2D8D]"
                 />
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
                 <button
                   type="submit"
-                  className="px-7 py-3.5 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-90 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FF2D8D]/25 flex items-center gap-2 cursor-pointer"
+                  className="px-7 py-3.5 bg-[#FF2D8D] hover:bg-[#E61B78] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-[#FF2D8D]/25 flex items-center gap-2 cursor-pointer"
                 >
                   <span>Submit Inquiry</span>
                   <Send className="w-3.5 h-3.5" />

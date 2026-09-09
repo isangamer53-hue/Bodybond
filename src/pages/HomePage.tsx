@@ -106,7 +106,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   ];
 
   return (
-    <div className="bg-transparent text-[#1E141D] min-h-screen font-sans selection:bg-[#FF2D8D] selection:text-white">
+    <div className="bg-white text-[#1E141D] min-h-screen font-sans selection:bg-[#FF2D8D] selection:text-white">
       
       {/* ========================================================================= */}
       {/* 1. HERO SECTION */}
@@ -169,7 +169,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* 2. SOFT PINK BANNER 1 */}
       {/* ========================================================================= */}
-      <div className="w-full bg-gradient-to-r from-[#FF52A3] via-[#FF2D8D] to-[#E61974] py-3.5 px-4 text-center shadow-md">
+      <div className="w-full bg-[#FF2D8D] py-3.5 px-4 text-center shadow-md">
         <p className="font-extrabold text-xs sm:text-sm tracking-[0.25em] text-white uppercase">
           BD’S #1 GIRL ESSENTIALS
         </p>
@@ -252,16 +252,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
               {/* Pink Badges on image */}
               <div className="absolute bottom-4 left-4 right-4 flex flex-wrap gap-2">
-                <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
                   HYPO-ALLERGENIC
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
                   SWEAT RESISTANT
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
                   PRECISION TOP
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
+                <span className="px-2.5 py-1 rounded-full bg-[#FF2D8D] text-white text-[10px] sm:text-xs font-extrabold tracking-wide uppercase shadow-md">
                   FABRIC SAFE
                 </span>
               </div>
@@ -286,7 +286,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               onClick={() => setSelectedGlueOption('1x')}
               className={`relative rounded-xl p-5 cursor-pointer transition-all border-2 bg-white flex items-center justify-between shadow-sm ${
                 selectedGlueOption === '1x'
-                  ? 'border-[#FF2D8D] bg-[#FFF8FA] shadow-[0_0_15px_rgba(255,45,141,0.15)]'
+                  ? 'border-[#FF2D8D] bg-white shadow-[0_0_15px_rgba(255,45,141,0.15)]'
                   : 'border-[#F2D3E2] hover:border-[#FF2D8D]/40'
               }`}
             >
@@ -315,12 +315,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               onClick={() => setSelectedGlueOption('2x')}
               className={`relative rounded-xl p-5 cursor-pointer transition-all border-2 bg-white overflow-hidden shadow-sm ${
                 selectedGlueOption === '2x'
-                  ? 'border-[#FF2D8D] bg-[#FFF8FA] shadow-[0_0_15px_rgba(255,45,141,0.15)]'
+                  ? 'border-[#FF2D8D] bg-white shadow-[0_0_15px_rgba(255,45,141,0.15)]'
                   : 'border-[#F2D3E2] hover:border-[#FF2D8D]/40'
               }`}
             >
               {/* Best Offer Pink Badge */}
-              <div className="absolute top-0 right-0 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-bl-lg">
+              <div className="absolute top-0 right-0 bg-[#FF2D8D] text-white text-[9px] font-extrabold tracking-wider uppercase px-2.5 py-1 rounded-bl-lg">
                 Best Offer
               </div>
 
@@ -365,7 +365,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="space-y-3">
             <button
               onClick={handleGlueAddToCart}
-              className="w-full py-4 bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] hover:opacity-95 text-white font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase rounded-xl transition-all shadow-xl shadow-[#FF2D8D]/25 cursor-pointer flex items-center justify-center gap-2 btn-press"
+              className="w-full py-4 bg-[#FF2D8D] hover:bg-[#E61B78] text-white font-extrabold text-sm sm:text-base tracking-[0.2em] uppercase rounded-xl transition-all shadow-xl shadow-[#FF2D8D]/25 cursor-pointer flex items-center justify-center gap-2 btn-press"
             >
               {isGlueAdded ? (
                 <>
@@ -423,7 +423,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   }`}
                 >
                   {/* Image Frame with Badge */}
-                  <div className="relative aspect-square rounded-xl overflow-hidden bg-[#FFF5F8]">
+                  <div className="relative aspect-square rounded-xl overflow-hidden bg-white">
                     <img
                       src={item.customImg}
                       alt={item.displayName}
@@ -433,7 +433,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     />
                     {item.badgeText && (
-                      <div className="absolute top-2 left-2 bg-gradient-to-r from-[#FF65AC] to-[#FF2D8D] text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded shadow-md">
+                      <div className="absolute top-2 left-2 bg-[#FF2D8D] text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded shadow-md">
                         {item.badgeText}
                       </div>
                     )}
@@ -461,7 +461,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                         e.stopPropagation();
                         addToCart(item);
                       }}
-                      className="w-full py-2.5 bg-[#FFEBF3] hover:bg-[#FF2D8D] hover:text-white text-[#FF2D8D] text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-colors mt-auto cursor-pointer shadow-sm btn-press"
+                      className="w-full py-2.5 bg-white border border-[#F2D3E2] hover:bg-[#FF2D8D] hover:text-white text-[#FF2D8D] text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-colors mt-auto cursor-pointer shadow-sm btn-press"
                     >
                       Quick Add
                     </button>
@@ -549,7 +549,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* ========================================================================= */}
       {/* 7. SOFT PINK BANNER 2 */}
       {/* ========================================================================= */}
-      <div className="w-full bg-gradient-to-r from-[#FF52A3] via-[#FF2D8D] to-[#E61974] py-3.5 px-4 text-center shadow-md">
+      <div className="w-full bg-[#FF2D8D] py-3.5 px-4 text-center shadow-md">
         <p className="font-extrabold text-xs sm:text-sm tracking-[0.25em] text-white uppercase">
           “LOOK HOT STAY PUT!”
         </p>

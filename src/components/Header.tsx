@@ -81,10 +81,10 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-[#FFF5F8]/95 backdrop-blur-xl text-[#1E141D] border-b border-[#F4D2E3] transition-all duration-300 shadow-sm">
+    <header className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-xl text-[#1E141D] border-b border-[#F4D2E3] transition-all duration-300 shadow-sm">
       {/* Top Radiant Hot Pink Announcement Bar with Language & COD info */}
       {announcement?.showTopBar !== false && (
-        <div className="bg-gradient-to-r from-[#FF52A3] via-[#FF2D8D] to-[#E61974] text-white text-xs font-black py-1.5 px-3 sm:px-6 tracking-wide shadow-md">
+        <div className="bg-[#FF2D8D] text-white text-xs font-black py-1.5 px-3 sm:px-6 tracking-wide shadow-md">
           <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
             {/* Left: Top announcement */}
             <div className="flex items-center gap-1.5 text-[11px] sm:text-xs truncate">
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
           <div className="flex items-center space-x-1.5 sm:space-x-2.5">
             <button
               onClick={() => openTrackingModal()}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-[#FFEBF3] hover:bg-[#FFD9E9] border border-[#F4BED7] text-[#1E141D] hover:text-[#FF2D8D] rounded-full text-xs font-bold transition-all cursor-pointer"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#F4BED7] text-[#1E141D] hover:text-[#FF2D8D] rounded-full text-xs font-bold transition-all cursor-pointer"
               title="Track your order live"
             >
               <Truck className="w-3.5 h-3.5 text-[#FF2D8D]" />
@@ -188,7 +188,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
       </div>
 
       {/* Desktop Quick Nav Strip */}
-      <div className="hidden lg:block border-t border-[#F4D2E3] bg-[#FFF5F8] py-2 px-4">
+      <div className="hidden lg:block border-t border-[#F4D2E3] bg-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex items-center justify-center space-x-6 text-xs font-bold uppercase tracking-widest text-[#5C3E52]">
           {navLinks.map((link) => {
             const isActive = activePage === link.id || (link.id === 'shop' && activePage === 'shop');
@@ -227,7 +227,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-[#FFF5F8] border-b border-[#F4D2E3] px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top duration-200 text-[#1E141D] shadow-xl">
+        <div className="lg:hidden bg-white border-b border-[#F4D2E3] px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top duration-200 text-[#1E141D] shadow-xl">
           <div className="grid grid-cols-1 gap-1">
             {/* Standard Nav Links */}
             {navLinks.filter(l => !l.isSpecial).map((link) => (
@@ -238,7 +238,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
                 className={`flex items-center justify-between w-full px-4 py-3 text-sm font-bold text-left rounded-xl transition-colors ${
                   link.disabled 
                     ? 'opacity-40 cursor-not-allowed text-gray-400' 
-                    : 'text-[#1E141D] hover:bg-[#FFE8F2] cursor-pointer'
+                    : 'text-[#1E141D] hover:bg-white cursor-pointer'
                 }`}
               >
                 <span className="tracking-wider uppercase text-xs">{link.label}</span>
@@ -251,7 +251,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
             ))}
 
             {/* DEDICATED EXTRA-BOLD GUIDES BOX IN SIDEBAR */}
-            <div className="my-2 p-3 rounded-2xl bg-gradient-to-br from-[#FFEAF3] via-[#FFF0F6] to-[#FFE6F0] border-2 border-[#FF2D8D]/40 shadow-sm space-y-2">
+            <div className="my-2 p-3 rounded-2xl bg-white border-2 border-[#F2D3E2] shadow-sm space-y-2">
               <div className="flex items-center justify-between pb-1.5 border-b border-[#FF2D8D]/20">
                 <span className="text-xs font-black uppercase text-[#FF2D8D] tracking-wider flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-[#FF2D8D]" />
@@ -265,7 +265,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
               {/* 1. WHERE TO USE */}
               <button
                 onClick={() => handleNavClick('where-to-use')}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-[#FFEBF3] text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-white text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
               >
                 <div>
                   <span className="font-black text-sm uppercase text-[#1E141D] group-hover:text-[#FF2D8D] block tracking-tight">
@@ -283,7 +283,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
               {/* 2. HOW TO USE */}
               <button
                 onClick={() => handleNavClick('how-to-use')}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-[#FFEBF3] text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-white text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
               >
                 <div>
                   <span className="font-black text-sm uppercase text-[#1E141D] group-hover:text-[#FF2D8D] block tracking-tight">
@@ -301,7 +301,7 @@ export const Header: React.FC<HeaderProps> = ({ onNavigate, activePage, onOpenAd
               {/* 3. HOW TO REMOVE */}
               <button
                 onClick={() => handleNavClick('how-to-remove')}
-                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-[#FFEBF3] text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-white hover:bg-white text-[#1E141D] border border-[#F4BED7] transition-all text-left cursor-pointer group shadow-sm"
               >
                 <div>
                   <span className="font-black text-sm uppercase text-[#1E141D] group-hover:text-[#FF2D8D] block tracking-tight">
