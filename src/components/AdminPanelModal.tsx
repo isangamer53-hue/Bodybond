@@ -661,7 +661,7 @@ export const AdminPanelModal: React.FC = () => {
                         <div className="space-y-1.5 pt-1">
                           <label className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg bg-[#262633] hover:bg-[#323244] active:bg-[#38384d] text-xs font-bold text-white transition-colors cursor-pointer border border-[#3A3A4C]">
                             <Upload className="w-3.5 h-3.5 text-[#FF2D8D]" />
-                            <span>Upload Photo / Video</span>
+                            <span>Upload Photo</span>
                             <input
                               type="file"
                               accept="image/*,video/*"
@@ -673,7 +673,7 @@ export const AdminPanelModal: React.FC = () => {
                           <div className="flex gap-1.5">
                             <input
                               type="url"
-                              placeholder="বা ছবি/ভিডিও লিংক পেস্ট করুন"
+                              placeholder="বা ছবির লিংক পেস্ট করুন"
                               value={customUrls[`glue-${idx}`] || ''}
                               onChange={(e) =>
                                 setCustomUrls((prev) => ({ ...prev, [`glue-${idx}`]: e.target.value }))
@@ -901,56 +901,13 @@ export const AdminPanelModal: React.FC = () => {
                     {/* Inputs & Controls */}
                     <div className="space-y-2 text-xs">
                       
-                      {/* Video File Upload & Universal URL */}
-                      <div>
-                        <label className="block text-[10px] text-[#888888] font-bold mb-1">
-                          ভিডিও ফাইল (MP4) অথবা অনলাইন লিংক (YouTube, Vimeo, MP4, Drive):
-                        </label>
-                        <div className="flex gap-2">
-                          <label className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-[#262633] hover:bg-[#323244] active:bg-[#38384d] text-xs font-bold text-white transition-colors cursor-pointer border border-[#3A3A4C] whitespace-nowrap">
-                            <Upload className="w-3.5 h-3.5 text-[#FF2D8D]" />
-                            <span>Upload MP4</span>
-                            <input
-                              type="file"
-                              accept="video/mp4,video/*"
-                              className="hidden"
-                              onChange={(e) => handleVideoFileUpload(idx, e)}
-                            />
-                          </label>
-
-                          <input
-                            type="url"
-                            placeholder="MP4 লিংক / YouTube / Drive link..."
-                            value={customUrls[`video-${idx}`] || ''}
-                            onChange={(e) =>
-                              setCustomUrls((prev) => ({
-                                ...prev,
-                                [`video-${idx}`]: e.target.value
-                              }))
-                            }
-                            className="w-full px-2.5 py-1 bg-[#121217] border border-[#2E2E3C] rounded-lg text-xs text-white focus:outline-none focus:border-[#FF2D8D]"
-                          />
-                          <button
-                            onClick={() => {
-                              const url = customUrls[`video-${idx}`]?.trim();
-                              if (url) {
-                                // Check if user accidentally pasted a web page URL (like shop product page)
-                                if (url.includes('/products/') || (url.includes('bodybond.com') && !url.includes('.mp4'))) {
-                                  showNotification('⚠️ এটি ওয়েবসাইটের পেজ লিংক! ভিডিওর জন্য MP4 ফাইল আপলোড করুন অথবা YouTube/Shorts লিংক দিন।');
-                                } else {
-                                  showNotification(`Video Reel #${idx + 1} লিংক সফলভাবে সেভ হয়েছে!`);
-                                }
-                                updateVideoReel(idx, { videoUrl: url, hasCustomBlob: false });
-                                setCustomUrls((prev) => ({ ...prev, [`video-${idx}`]: '' }));
-                              }
-                            }}
-                            className="px-3 py-1 bg-[#FF2D8D] hover:bg-[#e0267c] text-white rounded-lg text-xs font-bold cursor-pointer transition-colors whitespace-nowrap"
-                          >
-                            Save Link
-                          </button>
-                        </div>
-                        <p className="text-[10px] text-gray-500 mt-1">
-                          * MP4 URL, YouTube Shorts, YouTube Video, Vimeo অথবা Google Drive লিংক সরাসরি সাপোর্ট করে।
+                      {/* Video Source Info */}
+                      <div className="p-3 bg-[#FF2D8D]/10 border border-[#FF2D8D]/30 rounded-lg">
+                        <p className="text-[11px] text-white/80 font-medium">
+                          <span className="text-[#FF2D8D] font-bold">ভিডিও আপলোড:</span> এই ভিডিওটি প্রজেক্টের <code className="bg-black/50 px-1 py-0.5 rounded text-white text-[10px]">public/video{idx + 1}.mp4</code> ফাইল থেকে সরাসরি প্লে হচ্ছে। 
+                        </p>
+                        <p className="text-[10px] text-gray-400 mt-1">
+                          ভিডিও পরিবর্তন করতে বাম পাশের <strong>File Explorer</strong> থেকে <code>public</code> ফোল্ডারে <code>video{idx + 1}.mp4</code> নামে আপনার ভিডিওটি আপলোড করুন। এটি অটোমেটিক্যালি সবার জন্য আপডেট হয়ে যাবে (লিংকের কোনো ঝামেলা নেই)।
                         </p>
                       </div>
 

@@ -100,7 +100,7 @@ export const DEFAULT_VIDEO_REELS: VideoReelItem[] = [
     title: 'Keep Your Dress In Place',
     badge: 'KEEP YOUR DRESS IN PLACE',
     poster: 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=500&q=80',
-    videoUrl: '/assets/aistudio/videos/reel-dress.mp4',
+    videoUrl: '/video1.mp4',
     author: '@bodybond.bd',
     description: 'Deep V plunge & saree blouse stays locked to skin with zero wardrobe malfunctions.'
   },
