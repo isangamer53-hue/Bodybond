@@ -77,6 +77,26 @@ export async function loadVideoBlobUrl(reelId: string): Promise<string | null> {
 }
 
 /**
+ * Check if a custom video blob exists in IndexedDB
+ */
+export async function hasVideoBlob(reelId: string): Promise<boolean> {
+  try {
+    const db = await openDB();
+    return new Promise((resolve) => {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.get(reelId);
+      req.onsuccess = () => {
+        resolve(req.result instanceof Blob);
+      };
+      req.onerror = () => resolve(false);
+    });
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Delete a custom video from IndexedDB
  */
 export async function deleteVideoBlob(reelId: string): Promise<void> {

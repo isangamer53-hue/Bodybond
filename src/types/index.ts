@@ -126,6 +126,7 @@ export interface GalleryMediaItem {
   type?: 'image' | 'video';
   videoUrl?: string;
   poster?: string;
+  hasCustomBlob?: boolean;
 }
 
 export interface ConfidenceSlideItem {

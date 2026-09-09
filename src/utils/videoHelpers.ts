@@ -57,13 +57,19 @@ export function parseVideoSource(url: string | undefined | null): ProcessedVideo
   }
 
   // 4. Google Drive video preview link
-  // Matches: drive.google.com/file/d/XYZ/view or drive.google.com/open?id=XYZ
-  const gdriveMatch = clean.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+  // Matches any Google Drive file URL format:
+  // - drive.google.com/file/d/FILE_ID/view
+  // - drive.google.com/file/u/0/d/FILE_ID/view
+  // - drive.google.com/open?id=FILE_ID
+  // - drive.google.com/uc?id=FILE_ID
+  // - docs.google.com/file/d/FILE_ID
+  const gdriveMatch = clean.match(/(?:drive\.google\.com\/(?:file\/(?:u\/\d+\/)?d\/|open\?id=|uc\?.*id=)|docs\.google\.com\/file\/d\/)([a-zA-Z0-9_-]+)/i);
   if (gdriveMatch && gdriveMatch[1]) {
+    const fileId = gdriveMatch[1];
     return {
       type: 'iframe',
       src: clean,
-      embedUrl: `https://drive.google.com/file/d/${gdriveMatch[1]}/preview`,
+      embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
       isEmbed: true,
     };
   }
@@ -100,6 +106,12 @@ export function isMediaItemVideo(item?: { src?: string; type?: string; videoUrl?
     src.includes('tiktok.com') ||
     src.includes('vimeo.com') ||
     src.includes('drive.google.com') ||
+    src.includes('docs.google.com') ||
     src.startsWith('data:video/')
   );
+}
+
+export function isGoogleDriveUrl(url?: string | null): boolean {
+  if (!url) return false;
+  return url.includes('drive.google.com') || url.includes('docs.google.com');
 }

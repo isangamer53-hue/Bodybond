@@ -107,12 +107,18 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
   // If it's an embed (YouTube Shorts / standard YouTube / Vimeo / Google Drive / TikTok)
   if (parsed.isEmbed && parsed.embedUrl) {
     let embedSrc = parsed.embedUrl;
-    if (autoPlay && isInViewport && !embedSrc.includes('autoplay=1')) {
-      embedSrc += (embedSrc.includes('?') ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
+    // Only apply autoplay params to YouTube URLs
+    if (parsed.type === 'youtube') {
+      if (autoPlay && isInViewport && !embedSrc.includes('autoplay=1')) {
+        embedSrc += (embedSrc.includes('?') ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
+      }
     }
 
+    // Ensure iframe embeds are interactive so users can click play on Google Drive / YouTube
+    const sanitizedClass = className.replace(/\bpointer-events-none\b/g, '').trim() + ' pointer-events-auto';
+
     return (
-      <div className={`relative overflow-hidden w-full h-full bg-black ${className}`} onClick={onClick}>
+      <div className={`relative overflow-hidden w-full h-full bg-black ${sanitizedClass}`} onClick={onClick}>
         <iframe
           src={embedSrc}
           title="Video Player"

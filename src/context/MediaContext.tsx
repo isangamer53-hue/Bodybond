@@ -7,7 +7,7 @@ import {
   isFirestoreQuotaExceeded 
 } from '../utils/firestoreGuard';
 import { GalleryMediaItem, VideoReelItem, ConfidenceSlideItem, MediaConfig } from '../types';
-import { loadVideoBlobUrl, clearAllVideoBlobs } from '../utils/videoStorage';
+import { loadVideoBlobUrl, deleteVideoBlob, clearAllVideoBlobs } from '../utils/videoStorage';
 import { isMediaItemVideo } from '../utils/videoHelpers';
 
 const STORAGE_KEY = 'bodybond_custom_media_v2';
@@ -174,7 +174,7 @@ interface MediaContextType {
   featuredGlueImage: string;
   followUsImage: string;
   autoPlayVideos: boolean;
-  updateGalleryImage: (index: number, newSrc: string, newCaption?: string, type?: 'image' | 'video', poster?: string) => void;
+  updateGalleryImage: (index: number, newSrc: string, newCaption?: string, type?: 'image' | 'video', poster?: string, hasCustomBlob?: boolean) => void;
   addGalleryImage: (item?: GalleryMediaItem) => void;
   deleteGalleryImage: (index: number) => void;
   updateNipsImage: (index: number, newSrc: string, newCaption?: string) => void;
@@ -236,7 +236,34 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('bodibond_custom_media_v2');
         if (saved) {
           const parsed: Partial<MediaConfig> = JSON.parse(saved);
-          if (parsed.galleryImages) setGalleryImages(padGallery(parsed.galleryImages));
+          if (parsed.galleryImages) {
+            const restoredGallery = await Promise.all(parsed.galleryImages.map(async (item, idx) => {
+              const customBlobUrl = await loadVideoBlobUrl(`gallery-video-${idx}`);
+              if (customBlobUrl) {
+                return {
+                  ...item,
+                  src: customBlobUrl,
+                  videoUrl: customBlobUrl,
+                  type: 'video' as const,
+                  hasCustomBlob: true
+                };
+              }
+              if (item.src && !item.src.startsWith('blob:')) {
+                const isVid = isMediaItemVideo(item);
+                return {
+                  ...item,
+                  type: isVid ? ('video' as const) : item.type,
+                  videoUrl: isVid ? (item.videoUrl || item.src) : item.videoUrl
+                };
+              }
+              if (item.src?.startsWith('blob:')) {
+                const def = DEFAULT_GALLERY_IMAGES[idx] || DEFAULT_GALLERY_IMAGES[0];
+                return { ...def, caption: item.caption || def.caption };
+              }
+              return item;
+            }));
+            setGalleryImages(padGallery(restoredGallery));
+          }
           if (parsed.nipsImages) setNipsImages(parsed.nipsImages);
           if (parsed.confidenceSlides) setConfidenceSlides(parsed.confidenceSlides);
           if (parsed.heroBanner) setHeroBanner(parsed.heroBanner);
@@ -249,11 +276,18 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             const sanitizedReels = await Promise.all(parsed.videoReels.map(async (savedItem, idx) => {
               const def = DEFAULT_VIDEO_REELS[idx] || DEFAULT_VIDEO_REELS[0];
               let finalVideoUrl = savedItem.videoUrl;
-              if (savedItem.hasCustomBlob) {
-                const storedBlobUrl = await loadVideoBlobUrl(savedItem.id || def.id);
-                if (storedBlobUrl) finalVideoUrl = storedBlobUrl;
+              const storedBlobUrl = await loadVideoBlobUrl(savedItem.id || def.id);
+              if (storedBlobUrl) {
+                finalVideoUrl = storedBlobUrl;
+              } else if (finalVideoUrl?.startsWith('blob:')) {
+                finalVideoUrl = def.videoUrl;
               }
-              return { ...def, ...savedItem, videoUrl: finalVideoUrl || def.videoUrl };
+              return { 
+                ...def, 
+                ...savedItem, 
+                videoUrl: finalVideoUrl || def.videoUrl,
+                hasCustomBlob: !!storedBlobUrl
+              };
             }));
             setVideoReels(sanitizedReels);
           }
@@ -271,9 +305,50 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               getDoc(doc(db, 'settings', 'security'))
             ]);
 
-            if (gal.exists() && gal.data().galleryImages) setGalleryImages(padGallery(gal.data().galleryImages));
+            if (gal.exists() && gal.data().galleryImages) {
+              const remoteGal = gal.data().galleryImages as GalleryMediaItem[];
+              const mergedGal = await Promise.all(remoteGal.map(async (remoteItem, idx) => {
+                const localBlob = await loadVideoBlobUrl(`gallery-video-${idx}`);
+                if (localBlob) {
+                  return {
+                    ...remoteItem,
+                    src: localBlob,
+                    videoUrl: localBlob,
+                    type: 'video' as const,
+                    hasCustomBlob: true
+                  };
+                }
+                if (remoteItem.videoUrl || remoteItem.src) {
+                  const isVid = isMediaItemVideo(remoteItem);
+                  return {
+                    ...remoteItem,
+                    type: isVid ? ('video' as const) : remoteItem.type,
+                    videoUrl: isVid ? (remoteItem.videoUrl || remoteItem.src) : remoteItem.videoUrl
+                  };
+                }
+                return remoteItem;
+              }));
+              setGalleryImages(padGallery(mergedGal));
+            }
+
             if (nip.exists()) setNipsImages(nip.data().nipsImages);
-            if (rel.exists()) setVideoReels(rel.data().videoReels);
+
+            if (rel.exists() && rel.data().videoReels) {
+              const remoteReels = rel.data().videoReels as VideoReelItem[];
+              const mergedReels = await Promise.all(remoteReels.map(async (remoteReel) => {
+                const localBlob = await loadVideoBlobUrl(remoteReel.id);
+                if (localBlob) {
+                  return {
+                    ...remoteReel,
+                    videoUrl: localBlob,
+                    hasCustomBlob: true
+                  };
+                }
+                return remoteReel;
+              }));
+              setVideoReels(mergedReels);
+            }
+
             if (ban.exists()) {
               const d = ban.data();
               if (d.heroBanner) setHeroBanner(d.heroBanner);
@@ -305,7 +380,33 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       unsubs = [
         onSnapshot(
           doc(db, 'settings', 'media_gallery'), 
-          (s) => s.exists() && s.data().galleryImages && setGalleryImages(padGallery(s.data().galleryImages)),
+          async (s) => {
+            if (s.exists() && s.data().galleryImages) {
+              const remoteGal = s.data().galleryImages as GalleryMediaItem[];
+              const mergedGal = await Promise.all(remoteGal.map(async (remoteItem, idx) => {
+                const localBlob = await loadVideoBlobUrl(`gallery-video-${idx}`);
+                if (localBlob) {
+                  return {
+                    ...remoteItem,
+                    src: localBlob,
+                    videoUrl: localBlob,
+                    type: 'video' as const,
+                    hasCustomBlob: true
+                  };
+                }
+                if (remoteItem.videoUrl || remoteItem.src) {
+                  const isVid = isMediaItemVideo(remoteItem);
+                  return {
+                    ...remoteItem,
+                    type: isVid ? ('video' as const) : remoteItem.type,
+                    videoUrl: isVid ? (remoteItem.videoUrl || remoteItem.src) : remoteItem.videoUrl
+                  };
+                }
+                return remoteItem;
+              }));
+              setGalleryImages(padGallery(mergedGal));
+            }
+          },
           (err) => checkAndHandleFirestoreError(err)
         ),
         onSnapshot(
@@ -315,7 +416,23 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ),
         onSnapshot(
           doc(db, 'settings', 'media_reels'), 
-          (s) => s.exists() && setVideoReels(s.data().videoReels),
+          async (s) => {
+            if (s.exists() && s.data().videoReels) {
+              const remoteReels = s.data().videoReels as VideoReelItem[];
+              const mergedReels = await Promise.all(remoteReels.map(async (remoteReel) => {
+                const localBlob = await loadVideoBlobUrl(remoteReel.id);
+                if (localBlob) {
+                  return {
+                    ...remoteReel,
+                    videoUrl: localBlob,
+                    hasCustomBlob: true
+                  };
+                }
+                return remoteReel;
+              }));
+              setVideoReels(mergedReels);
+            }
+          },
           (err) => checkAndHandleFirestoreError(err)
         ),
         onSnapshot(
@@ -339,18 +456,25 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Sanitizers to prevent sending local blob URLs or large objects to Firestore
   const sanitizeGalleryForRemote = (list: GalleryMediaItem[]): GalleryMediaItem[] => {
     return list.map((item) => ({
-      src: item.src?.startsWith('blob:') ? '' : item.src,
+      src: item.src?.startsWith('blob:') ? '' : (item.src || ''),
       caption: item.caption || '',
       type: item.type || 'image',
-      videoUrl: item.videoUrl?.startsWith('blob:') ? '' : item.videoUrl,
-      poster: item.poster || undefined
+      videoUrl: item.videoUrl?.startsWith('blob:') ? '' : (item.videoUrl || ''),
+      poster: item.poster || '',
+      hasCustomBlob: !!item.hasCustomBlob
     }));
   };
 
   const sanitizeReelsForRemote = (reels: VideoReelItem[]): VideoReelItem[] => {
     return reels.map((reel) => ({
-      ...reel,
-      videoUrl: (reel.videoUrl || '').startsWith('blob:') ? '' : ((reel.videoUrl || '').startsWith('data:video') ? '' : reel.videoUrl)
+      id: reel.id || '',
+      title: reel.title || '',
+      likes: reel.likes || 0,
+      comments: reel.comments || 0,
+      shares: reel.shares || 0,
+      videoUrl: (reel.videoUrl || '').startsWith('blob:') ? '' : ((reel.videoUrl || '').startsWith('data:video') ? '' : (reel.videoUrl || '')),
+      poster: reel.poster || '',
+      hasCustomBlob: !!reel.hasCustomBlob
     }));
   };
 
@@ -427,9 +551,18 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const updateGalleryImage = (index: number, newSrc: string, newCaption?: string, type?: 'image' | 'video', poster?: string) => {
+  const updateGalleryImage = (
+    index: number,
+    newSrc: string,
+    newCaption?: string,
+    type?: 'image' | 'video',
+    poster?: string,
+    hasCustomBlob?: boolean
+  ) => {
     let updatedGallery: GalleryMediaItem[] = [];
     const isVideo = type === 'video' || isMediaItemVideo({ src: newSrc, type });
+    const isCustomBlob = hasCustomBlob !== undefined ? hasCustomBlob : newSrc.startsWith('blob:');
+
     setGalleryImages((prev) => {
       const copy = [...prev];
       if (index >= 0 && index < copy.length) {
@@ -439,7 +572,8 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           caption: newCaption !== undefined ? newCaption : copy[index].caption,
           type: isVideo ? 'video' : (type === 'image' ? 'image' : copy[index].type),
           videoUrl: isVideo ? newSrc : (type === 'image' ? undefined : copy[index].videoUrl),
-          poster: poster || copy[index].poster
+          poster: poster || copy[index].poster,
+          hasCustomBlob: isCustomBlob
         };
       } else {
         copy[index] = {
@@ -447,7 +581,8 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           caption: newCaption || `Photo #${index + 1}`,
           type: isVideo ? 'video' : 'image',
           videoUrl: isVideo ? newSrc : undefined,
-          poster: poster
+          poster: poster,
+          hasCustomBlob: isCustomBlob
         };
       }
       updatedGallery = copy;
@@ -487,6 +622,7 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const deleteGalleryImage = (index: number) => {
+    deleteVideoBlob(`gallery-video-${index}`).catch(() => {});
     let updatedGallery: GalleryMediaItem[] = [];
     setGalleryImages((prev) => {
       if (prev.length <= 1) return prev;
