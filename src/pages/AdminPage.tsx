@@ -62,6 +62,8 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
     deleteVideoReel,
     moveVideoReel,
     updateGalleryImage,
+    addGalleryImage,
+    deleteGalleryImage,
     updateNipsImage,
     updateHeroBanner,
     updateWelcomeImage,
@@ -707,7 +709,24 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs font-bold text-gray-300">
                           <span className="text-[#C084FC]">ছবি #{idx + 1} {idx === 0 && '(মেইন ডিসপ্লে)'}</span>
-                          <span className="text-[10px] text-gray-400 truncate max-w-[120px]">{img.caption}</span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] text-gray-400 truncate max-w-[100px]">{img.caption}</span>
+                            {galleryImages.length > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (confirm(`আপনি কি ছবি #${idx + 1} মুছে ফেলতে চান?`)) {
+                                    deleteGalleryImage(idx);
+                                    showNotification(`ছবি #${idx + 1} মুছে ফেলা হয়েছে!`);
+                                  }
+                                }}
+                                className="p-1 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-950/40 transition-colors cursor-pointer"
+                                title="ছবি মুছে ফেলুন"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="aspect-square rounded-xl overflow-hidden bg-black border border-[#2F1E4A]">
                           <img src={img.src} alt={img.caption} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
@@ -768,6 +787,28 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
                       </div>
                     </div>
                   ))}
+
+                  {/* Add More Gallery Photos Card */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addGalleryImage();
+                      showNotification('নতুন ছবির স্লট যোগ করা হয়েছে! এবার আপনি ছবি আপলোড করতে পারেন।');
+                    }}
+                    className="min-h-[260px] rounded-2xl border-2 border-dashed border-[#A855F7]/40 hover:border-[#A855F7] bg-[#1C142B]/50 hover:bg-[#1C142B] transition-all flex flex-col items-center justify-center gap-3 p-6 text-center cursor-pointer group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-[#A855F7]/20 group-hover:bg-[#A855F7]/30 flex items-center justify-center text-[#C084FC]">
+                      <Plus className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="font-black text-sm text-white block">
+                        + নতুন ছবি যোগ করুন
+                      </span>
+                      <span className="text-[11px] text-gray-400 block pt-1">
+                        গ্যালারিতে অতিরিক্ত ছবি বা ফাইল আপলোড করার জন্য ক্লিক করুন
+                      </span>
+                    </div>
+                  </button>
                 </div>
               )}
 

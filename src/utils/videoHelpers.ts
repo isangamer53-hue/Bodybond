@@ -85,3 +85,21 @@ export function parseVideoSource(url: string | undefined | null): ProcessedVideo
     isEmbed: false,
   };
 }
+
+export function isMediaItemVideo(item?: { src?: string; type?: string; videoUrl?: string } | null): boolean {
+  if (!item) return false;
+  if (item.type === 'video') return true;
+  if (item.videoUrl && item.videoUrl.trim().length > 0) return true;
+  const src = (item.src || '').toLowerCase();
+  return (
+    src.endsWith('.mp4') ||
+    src.endsWith('.webm') ||
+    src.endsWith('.mov') ||
+    src.includes('youtube.com') ||
+    src.includes('youtu.be') ||
+    src.includes('tiktok.com') ||
+    src.includes('vimeo.com') ||
+    src.includes('drive.google.com') ||
+    src.startsWith('data:video/')
+  );
+}

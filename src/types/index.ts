@@ -123,6 +123,9 @@ export interface VideoReelItem {
 export interface GalleryMediaItem {
   src: string;
   caption: string;
+  type?: 'image' | 'video';
+  videoUrl?: string;
+  poster?: string;
 }
 
 export interface ConfidenceSlideItem {

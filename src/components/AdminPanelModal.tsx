@@ -22,12 +22,15 @@ import {
   Tag,
   Sliders,
   ShoppingBag,
-  DollarSign
+  DollarSign,
+  Plus,
+  Trash2
 } from 'lucide-react';
 import { useMedia } from '../context/MediaContext';
 import { useOrders } from '../context/OrderContext';
 import { readMediaFile } from '../utils/mediaUtils';
 import { saveVideoBlob } from '../utils/videoStorage';
+import { isMediaItemVideo } from '../utils/videoHelpers';
 import { AdminOrdersTab } from './admin/AdminOrdersTab';
 import { AdminCouponsTab } from './admin/AdminCouponsTab';
 import { AdminStoreSettingsTab } from './admin/AdminStoreSettingsTab';
@@ -48,6 +51,8 @@ export const AdminPanelModal: React.FC = () => {
     followUsImage,
     autoPlayVideos,
     updateGalleryImage,
+    addGalleryImage,
+    deleteGalleryImage,
     updateNipsImage,
     updateVideoReel,
     updateConfidenceSlide,
@@ -140,18 +145,24 @@ export const AdminPanelModal: React.FC = () => {
     }
   };
 
-  // Handle Photo File Upload for Glue Gallery
+  // Handle Photo or Video File Upload for Glue Gallery
   const handlePhotoFileUpload = async (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       setIsProcessing(true);
-      const dataUrl = await readMediaFile(file);
-      updateGalleryImage(index, dataUrl);
-      showNotification(`Glue Photo #${index + 1} আপলোড সফল হয়েছে!`);
+      if (file.type.startsWith('video/')) {
+        const blobUrl = await saveVideoBlob(`gallery-video-${index}`, file);
+        updateGalleryImage(index, blobUrl, undefined, 'video');
+        showNotification(`গ্যালারি ভিডিও #${index + 1} সফলভাবে আপলোড হয়েছে!`);
+      } else {
+        const dataUrl = await readMediaFile(file);
+        updateGalleryImage(index, dataUrl, undefined, 'image');
+        showNotification(`গ্যালারি ছবি #${index + 1} আপলোড সফল হয়েছে!`);
+      }
     } catch (err: any) {
-      showError(err.message || 'Failed to process image');
+      showError(err.message || 'মিডিয়া আপলোডে সমস্যা হয়েছে');
     } finally {
       setIsProcessing(false);
       e.target.value = '';
@@ -595,33 +606,65 @@ export const AdminPanelModal: React.FC = () => {
                             <span className="text-xs font-black text-[#FF2D8D] uppercase tracking-wider">
                               Glue Photo #{idx + 1}
                             </span>
-                            {idx === 0 && (
-                              <span className="text-[9px] bg-[#FF2D8D] text-white font-extrabold px-1.5 py-0.5 rounded">
-                                Main Display
-                              </span>
-                            )}
+                            <div className="flex items-center gap-1.5">
+                              {idx === 0 && (
+                                <span className="text-[9px] bg-[#FF2D8D] text-white font-extrabold px-1.5 py-0.5 rounded">
+                                  Main Display
+                                </span>
+                              )}
+                              {galleryImages.length > 1 && (
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    if (confirm(`Glue Photo #${idx + 1} মুছে ফেলতে চান?`)) {
+                                      deleteGalleryImage(idx);
+                                      showNotification(`Glue Photo #${idx + 1} মুছে ফেলা হয়েছে!`);
+                                    }
+                                  }}
+                                  className="p-1 rounded text-gray-400 hover:text-red-400 hover:bg-red-950/40 transition-colors cursor-pointer"
+                                  title="ছবি মুছে ফেলুন"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              )}
+                            </div>
                           </div>
 
-                          <div className="aspect-square w-full rounded-lg overflow-hidden bg-black border border-[#2E2E3C] relative group">
-                            <img src={img.src} alt={img.caption} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
-                          </div>
+                          {isMediaItemVideo(img) ? (
+                            <div className="aspect-square w-full rounded-lg overflow-hidden bg-black border border-[#2E2E3C] relative group flex items-center justify-center">
+                              <video 
+                                src={img.videoUrl || img.src} 
+                                className="w-full h-full object-cover" 
+                                muted 
+                                playsInline 
+                              />
+                              <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-[#FF2D8D] text-white text-[9px] font-bold flex items-center gap-1 shadow">
+                                <Play className="w-2.5 h-2.5 fill-current" />
+                                <span>ভিডিও</span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="aspect-square w-full rounded-lg overflow-hidden bg-black border border-[#2E2E3C] relative group">
+                              <img src={img.src} alt={img.caption} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                            </div>
+                          )}
 
                           <input
                             type="text"
                             value={img.caption}
-                            onChange={(e) => updateGalleryImage(idx, img.src, e.target.value)}
+                            onChange={(e) => updateGalleryImage(idx, img.src, e.target.value, isMediaItemVideo(img) ? 'video' : 'image')}
                             className="w-full px-2 py-1 bg-[#121217] border border-[#2E2E3C] rounded-lg text-xs text-white focus:outline-none focus:border-[#FF2D8D]"
-                            placeholder="ছবির ক্যাপশন লিখুন..."
+                            placeholder="ছবির বা ভিডিওর ক্যাপশন লিখুন..."
                           />
                         </div>
 
                         <div className="space-y-1.5 pt-1">
                           <label className="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-lg bg-[#262633] hover:bg-[#323244] active:bg-[#38384d] text-xs font-bold text-white transition-colors cursor-pointer border border-[#3A3A4C]">
                             <Upload className="w-3.5 h-3.5 text-[#FF2D8D]" />
-                            <span>Upload New Photo</span>
+                            <span>Upload Photo / Video</span>
                             <input
                               type="file"
-                              accept="image/*"
+                              accept="image/*,video/*"
                               className="hidden"
                               onChange={(e) => handlePhotoFileUpload(idx, e)}
                             />
@@ -630,7 +673,7 @@ export const AdminPanelModal: React.FC = () => {
                           <div className="flex gap-1.5">
                             <input
                               type="url"
-                              placeholder="বা ছবির লিংক পেস্ট করুন"
+                              placeholder="বা ছবি/ভিডিও লিংক পেস্ট করুন"
                               value={customUrls[`glue-${idx}`] || ''}
                               onChange={(e) =>
                                 setCustomUrls((prev) => ({ ...prev, [`glue-${idx}`]: e.target.value }))
@@ -641,8 +684,9 @@ export const AdminPanelModal: React.FC = () => {
                               onClick={() => {
                                 const url = customUrls[`glue-${idx}`]?.trim();
                                 if (url) {
-                                  updateGalleryImage(idx, url);
-                                  showNotification(`Glue Photo #${idx + 1} আপডেট হয়েছে!`);
+                                  const isVid = isMediaItemVideo({ src: url });
+                                  updateGalleryImage(idx, url, undefined, isVid ? 'video' : 'image');
+                                  showNotification(`Gallery #${idx + 1} আপডেট হয়েছে!`);
                                   setCustomUrls((prev) => ({ ...prev, [`glue-${idx}`]: '' }));
                                 }
                               }}
@@ -654,6 +698,28 @@ export const AdminPanelModal: React.FC = () => {
                         </div>
                       </div>
                     ))}
+
+                    {/* Add Photo Card */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addGalleryImage();
+                        showNotification('নতুন ছবির স্লট যোগ করা হয়েছে! এবার আপনি ছবি আপলোড করতে পারেন।');
+                      }}
+                      className="min-h-[220px] rounded-xl border-2 border-dashed border-[#FF2D8D]/40 hover:border-[#FF2D8D] bg-[#18181E]/60 hover:bg-[#18181E] transition-all flex flex-col items-center justify-center gap-2 p-5 text-center cursor-pointer group"
+                    >
+                      <div className="w-10 h-10 rounded-full bg-[#FF2D8D]/20 group-hover:bg-[#FF2D8D]/30 flex items-center justify-center text-[#FF2D8D]">
+                        <Plus className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="font-bold text-xs text-white block">
+                          + নতুন ছবি যোগ করুন
+                        </span>
+                        <span className="text-[10px] text-gray-400 block pt-0.5">
+                          গ্যালারিতে অতিরিক্ত ছবি আপলোড করতে ক্লিক করুন
+                        </span>
+                      </div>
+                    </button>
                   </div>
                 </div>
               )}

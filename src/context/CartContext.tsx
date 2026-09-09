@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { CartItem, CurrencyCode, Product } from '../types';
 import { CURRENCY_RATES, PRODUCTS } from '../data/products';
 
@@ -203,13 +203,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setAppliedDiscount(0);
   };
 
-  const convertPrice = (priceNZD: number): number => {
+  const openDrawer = useCallback(() => setIsCartOpen(true), []);
+  const closeDrawer = useCallback(() => setIsCartOpen(false), []);
+
+  const convertPrice = useCallback((priceNZD: number): number => {
     const safePrice = typeof priceNZD === 'number' && !isNaN(priceNZD) ? priceNZD : 0;
     const rate = CURRENCY_RATES[currency]?.rate || 1.0;
     return safePrice * rate;
-  };
+  }, [currency]);
 
-  const formatPrice = (priceNZD: number): string => {
+  const formatPrice = useCallback((priceNZD: number): string => {
     const safePrice = typeof priceNZD === 'number' && !isNaN(priceNZD) ? priceNZD : 0;
     const currencyInfo = CURRENCY_RATES[currency] || CURRENCY_RATES.BDT;
     const converted = safePrice * currencyInfo.rate;
@@ -217,41 +220,64 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return `${currencyInfo.symbol}${Math.round(converted).toLocaleString('en-US')}`;
     }
     return `${currencyInfo.symbol}${converted.toFixed(2)} ${currencyInfo.code}`;
-  };
+  }, [currency]);
+
+  const contextValue = useMemo<CartContextType>(() => ({
+    cart,
+    isCartOpen,
+    setIsCartOpen,
+    openDrawer,
+    closeDrawer,
+    currency,
+    setCurrency,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    subtotalNZD,
+    discountCode,
+    appliedDiscount,
+    applyDiscountCode,
+    removeDiscountCode,
+    freeShippingThresholdNZD: FREE_SHIPPING_THRESHOLD_NZD,
+    freeShippingRemainingNZD,
+    isFreeShippingUnlocked,
+    formatPrice,
+    convertPrice,
+    quickViewProduct,
+    setQuickViewProduct,
+    isSearchOpen,
+    setIsSearchOpen,
+    isCheckoutOpen,
+    setIsCheckoutOpen,
+  }), [
+    cart,
+    isCartOpen,
+    openDrawer,
+    closeDrawer,
+    currency,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    totalItems,
+    subtotalNZD,
+    discountCode,
+    appliedDiscount,
+    applyDiscountCode,
+    removeDiscountCode,
+    freeShippingRemainingNZD,
+    isFreeShippingUnlocked,
+    formatPrice,
+    convertPrice,
+    quickViewProduct,
+    isSearchOpen,
+    isCheckoutOpen,
+  ]);
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        isCartOpen,
-        setIsCartOpen,
-        openDrawer: () => setIsCartOpen(true),
-        closeDrawer: () => setIsCartOpen(false),
-        currency,
-        setCurrency,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-        totalItems,
-        subtotalNZD,
-        discountCode,
-        appliedDiscount,
-        applyDiscountCode,
-        removeDiscountCode,
-        freeShippingThresholdNZD: FREE_SHIPPING_THRESHOLD_NZD,
-        freeShippingRemainingNZD,
-        isFreeShippingUnlocked,
-        formatPrice,
-        convertPrice,
-        quickViewProduct,
-        setQuickViewProduct,
-        isSearchOpen,
-        setIsSearchOpen,
-        isCheckoutOpen,
-        setIsCheckoutOpen,
-      }}
-    >
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

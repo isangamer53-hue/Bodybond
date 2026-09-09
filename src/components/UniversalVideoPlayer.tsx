@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { parseVideoSource } from '../utils/videoHelpers';
 
 interface UniversalVideoPlayerProps {
@@ -9,6 +9,7 @@ interface UniversalVideoPlayerProps {
   muted?: boolean;
   controls?: boolean;
   className?: string;
+  preload?: 'none' | 'metadata' | 'auto';
   onLoadedData?: () => void;
   onClick?: () => void;
 }
@@ -21,11 +22,34 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
   muted = true,
   controls = false,
   className = 'w-full h-full object-cover',
+  preload = 'metadata',
   onLoadedData,
   onClick,
 }) => {
   const parsed = parseVideoSource(videoUrl);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isInViewport, setIsInViewport] = useState(false);
+
+  // Viewport IntersectionObserver to play only when visible
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !('IntersectionObserver' in window)) {
+      setIsInViewport(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInViewport(entry.isIntersecting);
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(video);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
 
   // Robust HTML5 video autoplay handling for Chromium, Safari & Mobile
   useEffect(() => {
@@ -38,7 +62,7 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
       video.muted = true;
     }
 
-    if (autoPlay) {
+    if (autoPlay && isInViewport) {
       video.defaultMuted = true;
       video.muted = true;
 
@@ -47,7 +71,6 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
         const playPromise = video.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // If browser autoplay policy held it back, retry when metadata/canplay is ready
             const handleReady = () => {
               video.play().catch(() => {});
               video.removeEventListener('canplay', handleReady);
@@ -59,13 +82,11 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
 
       attemptPlay();
 
-      // Also trigger as soon as data or metadata is loaded
       video.addEventListener('loadedmetadata', attemptPlay, { once: true });
       video.addEventListener('loadeddata', attemptPlay, { once: true });
 
-      // First-touch fallback for mobile Safari / strict power-saving modes
       const handleFirstInteraction = () => {
-        if (videoRef.current && videoRef.current.paused) {
+        if (videoRef.current && videoRef.current.paused && isInViewport) {
           videoRef.current.play().catch(() => {});
         }
       };
@@ -81,13 +102,12 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
     } else {
       video.pause();
     }
-  }, [autoPlay, muted, parsed.src, parsed.isEmbed]);
+  }, [autoPlay, muted, parsed.src, parsed.isEmbed, isInViewport]);
 
   // If it's an embed (YouTube Shorts / standard YouTube / Vimeo / Google Drive / TikTok)
   if (parsed.isEmbed && parsed.embedUrl) {
-    // Append autoplay parameters if autoPlay is requested
     let embedSrc = parsed.embedUrl;
-    if (autoPlay && !embedSrc.includes('autoplay=1')) {
+    if (autoPlay && isInViewport && !embedSrc.includes('autoplay=1')) {
       embedSrc += (embedSrc.includes('?') ? '&' : '?') + 'autoplay=1&mute=1&playsinline=1';
     }
 
@@ -96,6 +116,7 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
         <iframe
           src={embedSrc}
           title="Video Player"
+          loading="lazy"
           className="w-full h-full border-0 absolute inset-0 pointer-events-auto"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
@@ -110,12 +131,12 @@ export const UniversalVideoPlayer: React.FC<UniversalVideoPlayerProps> = ({
       ref={videoRef}
       src={parsed.src || undefined}
       poster={poster}
-      autoPlay={autoPlay}
+      autoPlay={autoPlay && isInViewport}
       loop={loop}
       muted={muted}
       controls={controls}
       playsInline
-      preload="auto"
+      preload={preload}
       onLoadedData={onLoadedData}
       onClick={onClick}
       className={className}

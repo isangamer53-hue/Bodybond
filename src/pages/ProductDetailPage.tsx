@@ -33,6 +33,7 @@ import { useOrders } from '../context/OrderContext';
 import { VideoReelItem } from '../types';
 import { UniversalVideoPlayer } from '../components/UniversalVideoPlayer';
 import { SloganMarquee } from '../components/MarqueeTicker';
+import { isMediaItemVideo } from '../utils/videoHelpers';
 
 interface ProductDetailPageProps {
   productId: string;
@@ -66,6 +67,81 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // State
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [purchaseTier, setPurchaseTier] = useState<'1x' | '2x'>('1x');
+  const [isGalleryVideoMuted, setIsGalleryVideoMuted] = useState(true);
+
+  // Touch swipe gesture states
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  const [touchEndY, setTouchEndY] = useState<number | null>(null);
+
+  // Mouse drag support for desktop
+  const [mouseStartX, setMouseStartX] = useState<number | null>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+
+  const minSwipeDistance = 35; // px
+
+  const handleNextImage = () => {
+    if (activeProductGallery.length <= 1) return;
+    setActiveImageIndex((prev) => (prev + 1) % activeProductGallery.length);
+  };
+
+  const handlePrevImage = () => {
+    if (activeProductGallery.length <= 1) return;
+    setActiveImageIndex((prev) => (prev - 1 + activeProductGallery.length) % activeProductGallery.length);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEndX(null);
+    setTouchEndY(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+    setTouchStartY(e.targetTouches[0].clientY);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+    setTouchEndY(e.targetTouches[0].clientY);
+  };
+
+  const onTouchEnd = () => {
+    if (touchStartX === null || touchEndX === null) return;
+    const deltaX = touchStartX - touchEndX;
+    const deltaY = (touchStartY !== null && touchEndY !== null) ? Math.abs(touchStartY - touchEndY) : 0;
+
+    if (Math.abs(deltaX) > minSwipeDistance && Math.abs(deltaX) > deltaY) {
+      if (deltaX > 0) {
+        handleNextImage();
+      } else {
+        handlePrevImage();
+      }
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
+    setTouchEndX(null);
+    setTouchEndY(null);
+  };
+
+  const onMouseDown = (e: React.MouseEvent) => {
+    setMouseStartX(e.clientX);
+    setIsMouseDown(true);
+  };
+
+  const onMouseUp = (e: React.MouseEvent) => {
+    if (!isMouseDown || mouseStartX === null) {
+      setIsMouseDown(false);
+      return;
+    }
+    const deltaX = mouseStartX - e.clientX;
+    if (Math.abs(deltaX) > minSwipeDistance) {
+      if (deltaX > 0) {
+        handleNextImage();
+      } else {
+        handlePrevImage();
+      }
+    }
+    setIsMouseDown(false);
+    setMouseStartX(null);
+  };
   const [isIngredientsOpen, setIsIngredientsOpen] = useState(false);
   const [isFaqOpen, setIsFaqOpen] = useState(false);
   const [activeConfidenceSlide, setActiveConfidenceSlide] = useState(0);
@@ -212,51 +288,166 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           />
         </div>
 
-        {/* 1. Main Product Showcase Stage */}
-        <div className="space-y-3">
-          
-          {/* Main Visual */}
-          <div className="relative aspect-[4/5] sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#F2D3E2] shadow-md">
-            <img
-              src={activeProductGallery[activeImageIndex]?.src || activeProductGallery[0]?.src}
-              alt={activeProductGallery[activeImageIndex]?.caption || product.name}
-              referrerPolicy="no-referrer"
-              fetchPriority="high"
-              decoding="async"
-              className="w-full h-full object-cover object-center transition-all duration-300"
-            />
+        {/* 1. Main Product Showcase Stage with Touch Swipe, Video Support & Chevrons */}
+        {(() => {
+          const currentMediaItem = activeProductGallery[activeImageIndex] || activeProductGallery[0];
+          const isCurrentMediaVideo = isMediaItemVideo(currentMediaItem);
 
-            {/* Image Counter Pill */}
-            <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-[#1E141D] border border-[#F2D3E2] shadow-sm">
-              {activeImageIndex + 1} / {activeProductGallery.length}
-            </div>
-          </div>
-
-          {/* 6 Thumbnail Strip */}
-          <div className="grid grid-cols-6 gap-2">
-            {activeProductGallery.map((img, idx) => (
-              <button
-                key={idx}
-                onClick={() => setActiveImageIndex(idx)}
-                className={`aspect-square rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-white ${
-                  activeImageIndex === idx
-                    ? 'border-[#FF2D8D] ring-2 ring-[#FF2D8D]/30 scale-95'
-                    : 'border-[#F2D3E2] opacity-75 hover:opacity-100'
-                }`}
+          return (
+            <div className="space-y-3">
+              {/* Main Visual */}
+              <div 
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+                onMouseDown={onMouseDown}
+                onMouseUp={onMouseUp}
+                className="relative aspect-[4/5] sm:aspect-square w-full rounded-2xl overflow-hidden bg-white border border-[#F2D3E2] shadow-md select-none touch-pan-y group cursor-grab active:cursor-grabbing"
               >
-                <img 
-                  src={img.src} 
-                  alt={img.caption} 
-                  referrerPolicy="no-referrer" 
-                  loading="lazy" 
-                  decoding="async" 
-                  className="w-full h-full object-cover" 
-                />
-              </button>
-            ))}
-          </div>
+                {isCurrentMediaVideo ? (
+                  <div className="w-full h-full relative bg-black flex items-center justify-center">
+                    <UniversalVideoPlayer
+                      key={`gallery-vid-${activeImageIndex}-${currentMediaItem.videoUrl || currentMediaItem.src}`}
+                      videoUrl={currentMediaItem.videoUrl || currentMediaItem.src}
+                      poster={currentMediaItem.poster}
+                      autoPlay={true}
+                      loop={true}
+                      muted={isGalleryVideoMuted}
+                      controls={false}
+                      preload="auto"
+                      className="w-full h-full object-cover pointer-events-none"
+                    />
 
-        </div>
+                    {/* Floating Sound Toggle Button */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsGalleryVideoMuted(prev => !prev);
+                      }}
+                      aria-label={isGalleryVideoMuted ? "Unmute video" : "Mute video"}
+                      className="absolute top-3 right-3 z-20 px-2.5 py-1.5 rounded-full bg-black/70 hover:bg-black text-white backdrop-blur-md text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md active:scale-95 cursor-pointer border border-white/20"
+                    >
+                      {isGalleryVideoMuted ? (
+                        <>
+                          <VolumeX className="w-3.5 h-3.5 text-white/90" />
+                          <span className="text-[10px]">শব্দ চালু করুন</span>
+                        </>
+                      ) : (
+                        <>
+                          <Volume2 className="w-3.5 h-3.5 text-[#FF2D8D]" />
+                          <span className="text-[10px]">Sound On</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* Floating Video Live Indicator */}
+                    <div className="absolute top-3 left-3 z-20 px-2.5 py-1 rounded-full bg-black/70 backdrop-blur-md text-[10px] font-bold text-white flex items-center gap-1.5 border border-white/20 pointer-events-none">
+                      <span className="w-2 h-2 rounded-full bg-[#FF2D8D] animate-pulse" />
+                      <span>ভিডিও ডেমো (Live)</span>
+                    </div>
+                  </div>
+                ) : (
+                  <img
+                    key={activeImageIndex}
+                    src={currentMediaItem?.src || activeProductGallery[0]?.src}
+                    alt={currentMediaItem?.caption || product.name}
+                    referrerPolicy="no-referrer"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center transition-all duration-300 pointer-events-none"
+                  />
+                )}
+
+                {/* Left Chevron Button (Previous Image) */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handlePrevImage();
+                  }}
+                  aria-label="Previous photo"
+                  className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-[#1E141D] hover:text-[#FF2D8D] shadow-md border border-[#F2D3E2] flex items-center justify-center transition-all active:scale-95 cursor-pointer z-10"
+                >
+                  <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                </button>
+
+                {/* Right Chevron Button (Next Image) */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleNextImage();
+                  }}
+                  aria-label="Next photo"
+                  className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/90 hover:bg-white text-[#1E141D] hover:text-[#FF2D8D] shadow-md border border-[#F2D3E2] flex items-center justify-center transition-all active:scale-95 cursor-pointer z-10"
+                >
+                  <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+                </button>
+
+                {/* Media Counter Pill */}
+                <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-bold text-[#1E141D] border border-[#F2D3E2] shadow-sm pointer-events-none flex items-center gap-1">
+                  {isCurrentMediaVideo && <Play className="w-2.5 h-2.5 fill-current text-[#FF2D8D]" />}
+                  <span>{activeImageIndex + 1} / {activeProductGallery.length}</span>
+                </div>
+              </div>
+
+              {/* Thumbnail Strip (Cleanly adapts to 8+ photos & videos) */}
+              <div className={`grid gap-1.5 sm:gap-2 ${
+                activeProductGallery.length <= 6 
+                  ? 'grid-cols-6' 
+                  : activeProductGallery.length <= 8 
+                    ? 'grid-cols-8' 
+                    : 'grid-cols-5 sm:grid-cols-10'
+              }`}>
+                {activeProductGallery.map((img, idx) => {
+                  const isItemVideoThumb = isMediaItemVideo(img);
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`aspect-square rounded-lg overflow-hidden border-2 transition-all cursor-pointer bg-white relative ${
+                        activeImageIndex === idx
+                          ? 'border-[#FF2D8D] ring-2 ring-[#FF2D8D]/30 scale-95'
+                          : 'border-[#F2D3E2] opacity-75 hover:opacity-100'
+                      }`}
+                      aria-label={isItemVideoThumb ? `ভিডিও প্লে করুন #${idx + 1}` : `ছবি #${idx + 1}`}
+                    >
+                      {isItemVideoThumb ? (
+                        <div className="w-full h-full relative bg-black flex items-center justify-center">
+                          <img 
+                            src={img.poster || 'https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=400&q=80'} 
+                            alt={img.caption} 
+                            referrerPolicy="no-referrer" 
+                            loading="lazy" 
+                            decoding="async" 
+                            className="w-full h-full object-cover opacity-85" 
+                          />
+                          {/* Play badge overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#FF2D8D] text-white flex items-center justify-center shadow-md">
+                              <Play className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-current ml-0.5" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <img 
+                          src={img.src} 
+                          alt={img.caption} 
+                          referrerPolicy="no-referrer" 
+                          loading="lazy" 
+                          decoding="async" 
+                          className="w-full h-full object-cover" 
+                        />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* 2. Full-Width Soft Hot Pink Banner */}
         <div className="w-full bg-gradient-to-r from-[#FF65AC] via-[#FF2D8D] to-[#D91B74] text-white py-3 px-4 text-center rounded-xl shadow-md shadow-[#FF2D8D]/20 border border-white/20">

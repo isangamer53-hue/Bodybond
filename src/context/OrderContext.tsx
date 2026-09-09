@@ -1,10 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   collection, 
   onSnapshot, 
   doc, 
-  setDoc, 
-  deleteDoc,
   query,
   orderBy,
   limit,
@@ -13,6 +11,13 @@ import {
   getDocs
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import {
+  isFirestoreQuotaExceeded,
+  setFirestoreQuotaExceeded,
+  checkAndHandleFirestoreError,
+  safeSetDoc,
+  safeDeleteDoc
+} from '../utils/firestoreGuard';
 import { 
   CustomerOrder, 
   OrderStatus, 
@@ -35,11 +40,15 @@ enum OperationType {
 }
 
 function handleFirestoreError(error: unknown, _operationType: OperationType, _path: string | null, setQuotaExceeded?: (val: boolean) => void) {
-  const message = error instanceof Error ? error.message : String(error);
-  if (message.includes('Quota limit exceeded') || message.includes('quota')) {
+  const isExhausted = checkAndHandleFirestoreError(error);
+  if (isExhausted) {
     if (setQuotaExceeded) setQuotaExceeded(true);
+    setFirestoreQuotaExceeded(true);
+    console.warn('Firestore quota reached or write stream backed off. Switched to offline/local storage safely.');
+    return;
   }
-  console.error('Firestore Error: ', message);
+  const message = error instanceof Error ? error.message : String(error);
+  console.warn('Firestore Operation Notice: ', message);
 }
 
 export function sanitizeFirestoreObject<T>(data: T): T {
@@ -163,10 +172,24 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [trackingOrder, setTrackingOrder] = useState<CustomerOrder | null>(null);
   const [trackingQuery, setTrackingQuery] = useState<string>('');
   const [lastCreatedOrder, setLastCreatedOrder] = useState<CustomerOrder | null>(null);
-  const [isQuotaExceeded, setIsQuotaExceeded] = useState<boolean>(false);
+  const [isQuotaExceeded, setIsQuotaExceeded] = useState<boolean>(() => isFirestoreQuotaExceeded());
+
+  // Listen to global firestore quota status events
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail && typeof detail.exceeded === 'boolean') {
+        setIsQuotaExceeded(detail.exceeded);
+      }
+    };
+    window.addEventListener('firestore-quota-status', handler);
+    return () => window.removeEventListener('firestore-quota-status', handler);
+  }, []);
 
   // Persist Orders & Firestore Real-Time Listener (Optimized: Last 100 orders only)
   useEffect(() => {
+    if (isQuotaExceeded) return;
+
     const path = 'orders';
     const q = query(
       collection(db, path), 
@@ -195,7 +218,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [isQuotaExceeded]);
 
   // Persist Coupons
   useEffect(() => {
@@ -216,6 +239,8 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [announcement]);
 
   useEffect(() => {
+    if (isQuotaExceeded) return;
+
     const unsub = onSnapshot(
       doc(db, 'settings', 'announcement'),
       (snap) => {
@@ -242,7 +267,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       }
     );
     return () => unsub();
-  }, []);
+  }, [isQuotaExceeded]);
 
   // Search order by orderId or customer phone (Optimized for Firestore Quota)
   const searchOrder = useCallback(async (queryStr: string): Promise<CustomerOrder | null> => {
@@ -384,11 +409,9 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setOrders(prev => [newOrder, ...prev]);
     setLastCreatedOrder(newOrder);
 
-    // Save to Firebase Firestore safely sanitized
+    // Save to Firebase Firestore safely sanitized and guarded
     const payload = sanitizeFirestoreObject(newOrder);
-    setDoc(doc(db, 'orders', newOrder.id), payload).catch((err) => {
-      handleFirestoreError(err, OperationType.WRITE, `orders/${newOrder.id}`, setIsQuotaExceeded);
-    });
+    safeSetDoc(doc(db, 'orders', newOrder.id), payload);
 
     return newOrder;
   }, []);
@@ -401,6 +424,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     courierCode?: string, 
     notes?: string
   ) => {
+    let updatedPayload: CustomerOrder | null = null;
     setOrders(prevOrders => {
       return prevOrders.map(order => {
         if (order.id !== orderId) return order;
@@ -438,23 +462,21 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           timeline: updatedTimeline,
         };
 
-        // Sync to Firebase Firestore safely sanitized
-        const payload = sanitizeFirestoreObject(updatedOrder);
-        setDoc(doc(db, 'orders', orderId), payload, { merge: true }).catch((err) => {
-          handleFirestoreError(err, OperationType.WRITE, `orders/${orderId}`, setIsQuotaExceeded);
-        });
-
+        updatedPayload = updatedOrder;
         return updatedOrder;
       });
     });
+
+    if (updatedPayload) {
+      const payload = sanitizeFirestoreObject(updatedPayload);
+      safeSetDoc(doc(db, 'orders', orderId), payload, { merge: true });
+    }
   }, []);
 
   // Delete order
   const deleteOrder = useCallback((orderId: string) => {
     setOrders(prev => prev.filter(o => o.id !== orderId));
-    deleteDoc(doc(db, 'orders', orderId)).catch((err) => {
-      handleFirestoreError(err, OperationType.DELETE, `orders/${orderId}`, setIsQuotaExceeded);
-    });
+    safeDeleteDoc(doc(db, 'orders', orderId));
   }, []);
 
   // Coupons logic
@@ -507,6 +529,7 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   }, [coupons]);
 
   const updateAnnouncement = useCallback((config: Partial<AnnouncementConfig>) => {
+    let updatedAnnouncement: AnnouncementConfig | null = null;
     setAnnouncement(prev => {
       const updated = { ...prev, ...config };
       if (
@@ -522,68 +545,93 @@ export const OrderProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           updated.offerTargetTimestamp = Date.now() + (hrs * 3600 + mins * 60 + secs) * 1000;
         }
       }
-      const sanitized = sanitizeFirestoreObject(updated);
-      setDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true }).catch((err) => {
-        handleFirestoreError(err, OperationType.WRITE, 'settings/announcement', setIsQuotaExceeded);
-      });
+      updatedAnnouncement = updated;
       return updated;
     });
+
+    if (updatedAnnouncement) {
+      const sanitized = sanitizeFirestoreObject(updatedAnnouncement);
+      safeSetDoc(doc(db, 'settings', 'announcement'), sanitized, { merge: true });
+    }
   }, []);
 
   // Compute live recent buyers activity (sanitized for visitor social proof & maximum privacy)
-  const recentBuyerActivities: LiveBuyerActivity[] = orders.slice(0, 10).map((ord) => {
-    // Privacy-masked name: e.g. "Nusrat J***" or "Samira H***"
-    const formattedName = maskCustomerName(ord.customerName);
+  const recentBuyerActivities: LiveBuyerActivity[] = useMemo(() => {
+    return orders.slice(0, 10).map((ord) => {
+      // Privacy-masked name: e.g. "Nusrat J***" or "Samira H***"
+      const formattedName = maskCustomerName(ord.customerName);
 
-    const firstItem = ord.items[0];
-    const createdDate = new Date(ord.createdAt);
-    const diffMins = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60));
-    
-    let timeText = 'Just now';
-    if (diffMins > 60 * 24) {
-      timeText = `${Math.floor(diffMins / (60 * 24))}d ago`;
-    } else if (diffMins > 60) {
-      timeText = `${Math.floor(diffMins / 60)}h ago`;
-    } else if (diffMins > 0) {
-      timeText = `${diffMins}m ago`;
-    }
+      const firstItem = ord.items[0];
+      const createdDate = new Date(ord.createdAt);
+      const diffMins = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60));
+      
+      let timeText = 'Just now';
+      if (diffMins > 60 * 24) {
+        timeText = `${Math.floor(diffMins / (60 * 24))}d ago`;
+      } else if (diffMins > 60) {
+        timeText = `${Math.floor(diffMins / 60)}h ago`;
+      } else if (diffMins > 0) {
+        timeText = `${diffMins}m ago`;
+      }
 
-    return {
-      id: ord.id,
-      name: formattedName,
-      city: ord.city.includes('Dhaka') ? 'Dhaka' : ord.city,
-      productName: firstItem ? firstItem.name : 'Bodybond Glue (20ml)',
-      productImage: firstItem?.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80',
-      timeAgo: timeText,
-      verified: true,
-    };
-  });
+      return {
+        id: ord.id,
+        name: formattedName,
+        city: ord.city.includes('Dhaka') ? 'Dhaka' : ord.city,
+        productName: firstItem ? firstItem.name : 'Bodybond Glue (20ml)',
+        productImage: firstItem?.image || 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=400&q=80',
+        timeAgo: timeText,
+        verified: true,
+      };
+    });
+  }, [orders]);
+
+  const contextValue = useMemo<OrderContextType>(() => ({
+    orders,
+    isTrackingModalOpen,
+    trackingOrder,
+    trackingQuery,
+    openTrackingModal,
+    closeTrackingModal,
+    searchOrder,
+    createOrder,
+    updateOrderStatus,
+    deleteOrder,
+    coupons,
+    addCoupon,
+    toggleCouponStatus,
+    deleteCoupon,
+    validateCoupon,
+    announcement,
+    updateAnnouncement,
+    recentBuyerActivities,
+    lastCreatedOrder,
+    isQuotaExceeded,
+  }), [
+    orders,
+    isTrackingModalOpen,
+    trackingOrder,
+    trackingQuery,
+    openTrackingModal,
+    closeTrackingModal,
+    searchOrder,
+    createOrder,
+    updateOrderStatus,
+    deleteOrder,
+    coupons,
+    addCoupon,
+    toggleCouponStatus,
+    deleteCoupon,
+    validateCoupon,
+    announcement,
+    updateAnnouncement,
+    recentBuyerActivities,
+    lastCreatedOrder,
+    isQuotaExceeded,
+  ]);
 
   return (
-    <OrderContext.Provider
-      value={{
-        orders,
-        isTrackingModalOpen,
-        trackingOrder,
-        trackingQuery,
-        openTrackingModal,
-        closeTrackingModal,
-        searchOrder,
-        createOrder,
-        updateOrderStatus,
-        deleteOrder,
-        coupons,
-        addCoupon,
-        toggleCouponStatus,
-        deleteCoupon,
-        validateCoupon,
-        announcement,
-        updateAnnouncement,
-        recentBuyerActivities,
-        lastCreatedOrder,
-        isQuotaExceeded,
-      }}
-    >
+    <OrderContext.Provider value={contextValue}>
       {children}
       {isQuotaExceeded && (
         <div className="fixed bottom-4 left-4 right-4 z-[9999] animate-in fade-in slide-in-from-bottom-4 duration-300">
